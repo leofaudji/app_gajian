@@ -1,0 +1,233 @@
+<!-- DynaTree -->
+<link href="assets/plugins/jquery-dynatree/skin/ui.dynatree.css" rel="stylesheet" type="text/css" media="screen" />
+<script src="assets/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="assets/plugins/jquery-dynatree/jquery.dynatree.min.js" type="text/javascript"></script>
+<script src="assets/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h2 class="page-title">
+                Level Pengguna
+            </h2>
+        </div>
+        <div class="col-auto ml-auto d-print-none">
+            
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <form role="form" class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tambah Level Pengguna</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Kode</label>
+                        <input id="id" name="id" type="text" class="form-control" placeholder="0001" minlength="4" maxlength="4" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nama</label>
+                        <input id="name" name="name" type="text" class="form-control" placeholder="Nama Level">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div id="wtree" style="min-height:300px;max-height:350px;overflow:auto;border: 1px solid #eaeaea;"></div>
+                </div>
+                <input type="hidden" name="menus" id="menus">
+                <div class="d-flex mt-3">
+                    <button type="submit" class="btn btn-primary btn-block">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Daftar Level Pengguna</h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table card-table table-vcenter text-nowrap datatable table-striped table-hover" width="100%" id="mydt">
+                    <thead>
+                        <tr>
+                            <th style="width:70%">Level</th>
+                            <th style="width:30%"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    bo.usr_lv.idEdit= 0 ; 
+    bo.usr_lv.idGr   = bo.usr_lv.obj.find("#mydt") ;
+    bo.usr_lv.grid  = function(){
+        this.grid_conf   = {
+            "sDom": "<'table-responsive't><'row'<p i>>",
+            "destroy": true,
+            "scrollCollapse": true,
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ ",
+                "sInfo": "<b>_START_ - _END_</b> dari _TOTAL_ data"
+            },
+            "iDisplayLength": 5,
+            "ordering": false,
+            "ajax": burls + bo.usr_lv.path + "/grid"
+        }
+        
+        this.oGr    = this.idGr.dataTable(this.grid_conf) ;
+    }
+
+    bo.usr_lv.cmdEdit   = function(id){ 
+        this.init() ; 
+
+        br.get({
+            path : bo.usr_lv.url + "/edit/" + id,
+            success: function(r){
+                bo.usr_lv.idEdit= r.id; 
+                bo.usr_lv.obj.find("#id").val(r.id)
+                bo.usr_lv.obj.find("#name").val(r.name).focus();
+                bo.usr_lv.setTree(r.menus);
+                if(r.edit){
+                    bo.usr_lv.obj.find("#id").attr("readOnly", true);
+                }
+            }  
+        }) ;
+    }
+
+    bo.usr_lv.cmdDelete   = function(id){ 
+        if(confirm("Apakah akan menghapus level?")){
+            br.get({
+                path : bo.usr_lv.url + "/delete/" + id,
+                success: function(r){
+                    bo.usr_lv.init();    
+                }  
+            }) ;
+        }
+    }
+
+    bo.usr_lv.init      = function(){
+        this.idEdit= 0 ; 
+        this.oGr.api().ajax.reload(null, false) ; 
+        
+        this.obj.find("#id").val("").attr("readOnly", false);
+        this.obj.find("#name").val("") ;
+
+        this.obj.find("#wtree").dynatree("getRoot").visit(function(node){
+            node.select(false);
+        });
+    }
+    
+    bo.usr_lv.vdash    = [];
+    bo.usr_lv.initComp  = function(){
+        this.grid() ; 
+        this.sdash(app.menus); 
+        // init tree
+        this.initTree();
+    }
+
+    bo.usr_lv.initCb    = function(){
+        this.obj.find("#search-table").on("keyup", function(){
+            bo.usr_lv.idGr.fnFilter( $(this).val() ) ;
+        });
+
+        this.obj.find("#id").on("blur", function(){
+            bo.usr_lv.cmdEdit( $(this).val() );
+        })
+    } 
+
+    bo.usr_lv.initFunc  = function(){
+        // save
+        this.obj.find('form').submit(function(){
+            //submitHandler: function(form) { 
+                br.post({
+                    path : bo.usr_lv.url + "/save/" + bo.usr_lv.idEdit,
+                    data : bj.getDataJson(this), 
+                    success: function(d){
+                        bo.usr_lv.init();
+                    }     
+                }) ; 
+            //}
+
+            event.preventDefault();
+        }) ;  
+    }
+
+    bo.usr_lv.vtree     = [];
+    bo.usr_lv.initTree  = function(){
+        this.obj.find("#wtree").dynatree({
+			checkbox: true,
+			selectMode: 2,
+			onSelect: function(select, node) {
+				// Get a list of all selected nodes, and convert to a key array:
+				var selKeys = $.map(node.tree.getSelectedNodes(), function(node){
+				  return node.data.key;
+				});
+
+				bo.usr_lv.obj.find("#menus").val(selKeys.join(","));
+				// Get a list of all selected TOP nodes
+				var selRootNodes = node.tree.getSelectedNodes(true);
+				// ... and convert to a key array:
+				var selRootKeys = $.map(selRootNodes, function(node){
+				  return node.data.key;
+				});
+			},
+			onKeydown: function(node, event) {
+				if( event.which == 32 ) {
+				  node.toggleSelect();
+				  return false;
+				}
+			},
+			cookieId: "dynatree-Cb3",
+			idPrefix: "dynatree-Cb3-"
+        });
+    }
+
+    bo.usr_lv.setTree   = function(menus){
+        this.getTree(app.menus, this.vtree, menus);
+        this.obj.find("#wtree").dynatree("getRoot").removeChildren();
+        this.obj.find("#wtree").dynatree("getRoot").addChild(this.vtree) ;
+
+        this.tree_cell = this.obj.find("#wtree").dynatree("getSelectedNodes") ;
+        this.tree_cell = $.map(this.tree_cell,function(node){
+            return node.data.key ;
+        }) ;
+
+        this.obj.find("#menus").val(this.tree_cell.join(", "));
+    }
+
+    bo.usr_lv.getTree   = function(arr, sarr, menus){
+        if(menus == undefined) menus = "";
+        $.each(arr, function(i, val){
+            var chkd    = !!~menus.indexOf(val.o.md5);
+            if(val.child !== undefined){
+                sarr[i] = {title: val.name, key:val.o.md5, isFolder:true, select: chkd, children:[]};
+                bo.usr_lv.getTree(val.child, sarr[i].children, menus);
+            }else{
+                sarr.push({title: val.name, key:val.o.md5, select: chkd});
+            }
+        });
+    }
+
+    bo.usr_lv.sdash     = function(arr, mod){
+        if(mod == undefined) mod = "";
+        $.each(arr, function(i, val){
+            if(val.child !== undefined){
+                bo.usr_lv.sdash(val.child, val.name);
+            }else{
+                if(val.o.md5 !== undefined){
+                    bo.usr_lv.vdash.push({id: JSON.stringify(val.o), text: val.name + " (" + mod + ")"});
+                }
+            }
+        });
+    }
+    
+
+    $(function(){
+		bo.usr_lv.initComp() ;
+		bo.usr_lv.initCb() ;
+		bo.usr_lv.initFunc() ;
+	}) ;
+</script>

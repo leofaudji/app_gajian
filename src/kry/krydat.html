@@ -1,0 +1,405 @@
+<div class="col-md-12"></div> 
+  <div class="card"> 
+      <ul class="nav nav-tabs " data-bs-toggle="tabs">
+          <li class="nav-item">
+          <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
+              Daftar Karyawan</a> 
+          </li>
+          <li class="nav-item">
+          <a data-target="#tab-2" href="#tab-2" class="nav-link" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-pencil"></i></span>
+              Tambah Karyawan</a>
+          </li>
+          
+      </ul>
+      <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-1">
+                <form id="bsearch"> 
+                    
+                </form>
+                <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+            </div>
+            <div class="tab-pane" id="tab-2">
+                <form id="bform">
+                    <div class="row">  
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Perhatian: </strong>Dimohon untuk mengisi data dengan benar dan teliti. Terima Kasih
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group form-group-default form-group-default-select2 required">
+                                <label class="form-label required">Kantor</label>
+                                <select class="full-width scons" data-placeholder="Cari Kantor" required 
+                                name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group form-group-default required">
+                                <label class="form-label">No. Karyawan:</label>
+                                <div id="kode">&nbsp;</div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label class="form-label required" for="ktp">No. KTP:</label>
+                            <input type="number" id="ktp" name="ktp" class="form-control" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group form-group-default required">
+                                <label class="form-label required">Nama:</label>
+                                <input type="text" name="nama" id="nama" class="form-control" required placeholder="Nama Karyawan">
+                            </div>
+                        </div>
+                
+                        <div class="col-md-6">
+                            <label class="form-label required" for="alamat_ktp">Alamat KTP:</label>
+                            <input type="text" id="alamat_ktp" name="alamat_ktp" class="form-control" required>
+                        </div>
+                
+                        <div class="col-md-6">
+                            <label class="form-label required" for="alamat_tinggal">Alamat Tinggal:</label>
+                            <input type="text" id="alamat_tinggal" name="alamat_tinggal" class="form-control" required>
+                        </div>
+                
+                        <div class="col-md-2">
+                            <label class="form-label required" for="tempat_lahir">Tempat Lahir:</label>
+                            <input type="text" id="tempat_lahir" name="tempat_lahir" class="form-control" required>
+                        </div>
+                
+                        <div class="col-md-2">
+                            <label class="form-label required" for="tgl_lahir">Tanggal Lahir:</label>
+                            <input type="date" id="tgl_lahir" name="tgl_lahir" class="form-control" required>
+                        </div>
+                
+                        <div class="col-md-2">
+                            <label class="form-label">Jenis Kelamin:</label>
+                            <div class="radio-group"> 
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="jenis_kelamin" checked value="L">
+                                    <span class="form-check-label">Laki-laki</span>
+                                </label>
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="P">
+                                    <span class="form-check-label">Perempuan</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group form-group-default form-group-default-select2 required">
+                                <label class="form-label required">Agama:</label>
+                                <select class="full-width scons" data-placeholder="Cari Agama" required 
+                                name="agama" id="agama" data-sf="loadagama"></select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <label class="form-label required" for="telepon">Telepon:</label>
+                            <input type="number" id="telepon" name="telepon" class="form-control" required>
+                        </div>
+                
+                        <div class="col-md-2">
+                            <label class="form-label" for="npwp">NPWP:</label>
+                            <input type="number" id="npwp" name="npwp" class="form-control">
+                        </div>
+                
+                        <div class="col-md-2">
+                            <label class="form-label required" for="email">Email:</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="col-md-5">
+                            <div class="form-group form-group-default form-group-default-select2 required">
+                                <label class="form-label required">Pendidikan:</label>
+                                <select class="full-width scons" data-placeholder="Cari Pendidikan" required 
+                                name="pendidikan" id="pendidikan" data-sf="loadpendidikan"></select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-5">
+                            <div class="form-group form-group-default form-group-default-select2 required">
+                                <label class="form-label required">Jabatan:</label>
+                                <select class="full-width scons" data-placeholder="Cari Jabatan" required 
+                                name="jabatan" id="jabatan" data-sf="loadjabatan"></select>
+                            </div>
+                        </div>
+
+
+                        
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <!--
+                            <a href="#" class="btn btn-primary btn-block fs-18 w-100" data-bs-toggle="modal" data-bs-target="#modal-large" onclick="konfirmasi()">
+                                <i class="fa fa-save"></i>&nbsp;Simpan 
+                            </a>
+                        -->
+                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                    </div>
+                    
+                    <div class="modal modal-blur fade" id="modal-large" tabindex="-1" style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header"> 
+                              <h5 class="modal-title">Konfirmasi Data Karyawan</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="data_karyawan">
+                                
+                            </div>
+                            <div class="modal-footer"> 
+                              <button type="button" class="btn me-auto" data-bs-dismiss="modal">Batal</button>
+
+                              <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Proses</button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div> 
+<script>
+  bo.krydat.gr1_data = null ; 
+bo.krydat.gr1_loadd = function(){
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+}
+
+bo.krydat.gr1_load = function(){
+  this.obj.find('#gr1').w2grid({  
+        name : bo.krydat.id + '_gr1', 
+        limit : 100 , 
+        url : burls + bo.krydat.path + '/gr1',
+        show: {
+              footer : true,
+              toolbar : true,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'cmd', caption: ' ', size: '130px', sortable: false},
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false},
+              { field: 'nama', caption: 'Nama', size: '200px', sortable: false},
+              { field: 'alamat_tinggal', caption: 'Alamat', size: '300px', sortable: false},
+              { field: 'telepon', caption: 'Telepon', size: '120px', sortable: false},
+              { field: 'ttl', caption: 'Tempat, Tgl Lahir', size: '160px', sortable: false},
+              { field: 'jenis_kelamin', caption: 'JK', size: '40px', sortable: false},
+              { field: 'umur', caption: 'Umur', size: '80px', sortable: false},
+              { field: 'agama', caption: 'Agama', size: '80px', sortable: false},
+              { field: 'email', caption: 'Email', size: '140px', sortable: false},
+              { field: 'pendidikan', caption: 'Pendidikan', size: '100px', sortable: false},
+              { field: 'jabatan', caption: 'Jabatan', size: '100px', sortable: false}
+                                                                                    
+          ]
+
+    });     
+} 
+
+bo.krydat.gr1_setd = function(){
+  w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
+} 
+
+bo.krydat.gr1_reload = function(){
+  w2ui[this.id + '_gr1'].reload();
+}	 
+bo.krydat.gr1_refresh	= function(){
+  w2ui[this.id + '_gr1'].refresh();
+}	
+bo.krydat.gr1_destroy = function(){
+  if(w2ui[this.id + '_gr1'] !== undefined){
+    w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.krydat.gr1_render = function(){ 
+  this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
+}
+ 
+bo.krydat.gr1_reloadd	= function(){
+  this.gr1_loadd() ; 
+  this.gr1_setd() ;  
+  this.gr1_reload() ;   
+}
+
+  bo.krydat.kode = 0
+  bo.krydat.init = function(){
+    this.kode = 0;
+      
+    br.get({ 
+        path : bo.krydat.url + '/initkode',
+        success: function(r){
+            bo.krydat.obj.find("#kode").html(r.kode);
+        }
+    });
+
+    with(this.obj){
+        find("#kode_kantor").sVal("");
+        find("#ktp").val("");
+        find("#nama").val("");
+        find("#alamat_ktp").val("");
+        find("#alamat_tinggal").val("");
+        find("#tempat_lahir").val("");
+        find("#tgl_lahir").val("");
+        find("#agama").val("");
+        find("#telepon").val("");
+        find("#npwp").val("");
+        find("#email").val("");
+        find("#jabatan").sVal("");
+        find("#pendidikan").sVal("");
+    }
+
+    this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+  }
+
+  bo.krydat.edit = function(kode){
+      br.get({
+          path : bo.krydat.url + '/' + kode,
+          success: function(r){
+              if(Object.keys(r).length > 0){
+                  bo.krydat.kode = r.kode ;
+                  bo.krydat.obj.find("#kode").html(r.kode);
+                  bo.krydat.obj.find("#kode_kantor").sVal(r.kode_kantor);
+                  bo.krydat.obj.find("#kode").val(r.kode);
+                  bo.krydat.obj.find("#ktp").val(r.ktp);
+                  bo.krydat.obj.find("#nama").val(r.nama);
+                  bo.krydat.obj.find("#alamat_ktp").val(r.alamat_ktp);
+                  bo.krydat.obj.find("#alamat_tinggal").val(r.alamat_tinggal);
+                  bo.krydat.obj.find("#tempat_lahir").val(r.tempat_lahir);
+                  bo.krydat.obj.find("#tgl_lahir").val(r.tgl_lahir);
+                  bo.krydat.obj.find("#jenis_kelamin").val(r.jenis_kelamin);
+                  bo.krydat.obj.find("#agama").sVal(r.agama);
+                  bo.krydat.obj.find("#telepon").val(r.telepon);
+                  bo.krydat.obj.find("#npwp").val(r.npwp);
+                  bo.krydat.obj.find("#email").val(r.email);
+                  bo.krydat.obj.find("#jabatan").sVal(r.jabatan);
+                  bo.krydat.obj.find("#pendidikan").sVal(r.pendidikan);
+
+                  bo.krydat.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
+              }
+          }  
+      }) ;
+  }
+
+  bo.krydat.delete = function(kode){ 
+      swal.fire({
+          title: 'Apakah anda yakin data dihapus ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+      }).then((result)=>{
+          if (result.isConfirmed) { 
+              br.get({
+                  path : bo.krydat.url + '/hapus/' + kode,
+                  success: function(r){
+                      if(r.deleted){
+                          swal.fire({
+                              title: 'Data berhasil dihapus.',
+                              icon: 'success'
+                          });  
+                          bo.krydat.gr1_reloadd();
+                      }else{
+                          swal.fire({
+                              title: 'Data gagal dihapus.',
+                              icon: 'error'
+                          }); 
+                      }
+                      
+                      
+                  }  
+              }) ;
+          }
+      });
+      
+  }
+
+  bo.krydat.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.krydat.url 
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd();
+      this.gr1_load();
+  }
+
+  bo.krydat.initCb = function(){
+      this.obj.find('#kode_kantor').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.krydat.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.krydat.init();
+                  bo.krydat.gr1_reload();
+              break;
+              case '#tab-2':
+                  setTimeout(function(){
+                      //bo.krydat.obj.find('#kantor').focus();
+                      bo.krydat.obj.find('#kode_kantor').select2('open');
+                  }, 1);
+              break;
+          }
+      }); 
+  }
+
+  bo.krydat.initFunc = function(){
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data karyawan sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.krydat.url + "/" + bo.krydat.kode ,
+                      data : bj.getDataJson(this),
+                      success: function(d){
+                          bo.krydat.init();
+                          bo.krydat.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+                      }
+                  });
+              }
+          });
+          event.preventDefault();
+      }) ;
+  }
+
+  $(function(){
+      bo.krydat.initComp() ;
+      bo.krydat.initCb() ;
+      bo.krydat.initFunc() ;
+      bo.krydat.init();
+  }) ;
+
+</script>

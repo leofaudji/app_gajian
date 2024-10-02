@@ -1,0 +1,239 @@
+<div class="col-md-12"></div>
+  <div class="card">
+      <ul class="nav nav-tabs " data-bs-toggle="tabs">
+          <li class="nav-item">
+          <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
+              Daftar Jabatan</a> 
+          </li>
+          <li class="nav-item">
+          <a data-target="#tab-2" href="#tab-2" class="nav-link" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-pencil"></i></span>
+              Tambah Jabatan</a>
+          </li>
+          
+      </ul>
+      <div class="card-body">
+          <div class="tab-content">
+              <div class="tab-pane active" id="tab-1">
+                  <form id="bsearch"> 
+                      
+                  </form>
+                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+              </div>
+              <div class="tab-pane" id="tab-2"> 
+                  <form id="bform">
+                      <div class="row">
+                          <div class="col-md-2">
+                              <div class="form-group form-group-default required"> 
+                                  <label>Kode</label>
+                                  <input type="text" maxlength="2" name="kode" id="kode" class="form-control" required placeholder="Kode">
+                              </div>
+                          </div>
+                          <div class="col-md-10">
+                              <div class="form-group form-group-default required">
+                                  <label>Nama Jabatan</label>
+                                  <input type="text" name="keterangan" id="keterangan" class="form-control" required placeholder="Nama Jabatan">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row" style="margin-top:10px;">
+                          <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> 
+<script>
+  bo.kryjab.gr1_data = null ; 
+bo.kryjab.gr1_loadd = function(){
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+}
+
+bo.kryjab.gr1_load = function(){
+  this.obj.find('#gr1').w2grid({  
+        name : bo.kryjab.id + '_gr1', 
+        limit : 100 , 
+        url : burls + bo.kryjab.path + '/gr1',
+        show: {
+              footer : true,
+              toolbar : true,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'cmd', caption: ' ', size: '130px', sortable: false,frozen:true },
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false,frozen:true},
+              { field: 'keterangan', caption: 'Nama Jabatan', size: '100%', sortable: false}
+              
+          ]
+
+    });     
+} 
+
+bo.kryjab.gr1_setd = function(){
+  w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
+} 
+
+bo.kryjab.gr1_reload = function(){
+  w2ui[this.id + '_gr1'].reload();
+}	 
+bo.kryjab.gr1_refresh	= function(){
+  w2ui[this.id + '_gr1'].refresh();
+}	
+bo.kryjab.gr1_destroy = function(){
+  if(w2ui[this.id + '_gr1'] !== undefined){
+    w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.kryjab.gr1_render = function(){ 
+  this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
+}
+ 
+bo.kryjab.gr1_reloadd	= function(){
+  this.gr1_loadd() ; 
+  this.gr1_setd() ;  
+  this.gr1_reload() ;   
+}
+
+  bo.kryjab.kode = 0
+  bo.kryjab.init = function(){
+      this.kode = 0;
+      this.obj.find("#kode").val("");
+      this.obj.find("#keterangan").val("");
+
+      this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+  }
+
+  bo.kryjab.edit = function(kode){
+      br.get({
+          path : bo.kryjab.url + '/' + kode,
+          success: function(r){
+              if(Object.keys(r).length > 0){
+                  bo.kryjab.kode = r.kode ;
+                  bo.kryjab.obj.find("#kode").val(r.kode);
+                  bo.kryjab.obj.find("#keterangan").val(r.keterangan);
+
+                  bo.kryjab.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
+              }
+          }  
+      }) ;
+  }
+
+  bo.kryjab.delete = function(kode){ 
+      swal.fire({
+          title: 'Apakah anda yakin data dihapus ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+      }).then((result)=>{
+          if (result.isConfirmed) { 
+              br.get({
+                  path : bo.kryjab.url + '/hapus/' + kode,
+                  success: function(r){
+                      if(r.deleted){
+                          swal.fire({
+                              title: 'Data berhasil dihapus.',
+                              icon: 'success'
+                          });  
+                          bo.kryjab.gr1_reloadd();
+                      }else{
+                          swal.fire({
+                              title: 'Data gagal dihapus.',
+                              icon: 'error'
+                          }); 
+                      }
+                      
+                      
+                  }  
+              }) ;
+          }
+      });
+      
+  }
+
+  bo.kryjab.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.kryjab.url 
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd();
+      this.gr1_load();
+  }
+
+  bo.kryjab.initCb = function(){
+      this.obj.find('#skd_cabang').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.kryjab.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.kryjab.init();
+                  bo.kryjab.gr1_reload();
+              break;
+              case '#tab-2':
+                  setTimeout(function(){
+                      bo.kryjab.obj.find('#kode').focus();
+                  }, 1);
+              break;
+          }
+      }); 
+  }
+
+  bo.kryjab.initFunc = function(){
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data cabang sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.kryjab.url + "/" + bo.kryjab.kode ,
+                      data : bj.getDataJson(this),
+                      success: function(d){
+                          bo.kryjab.init();
+                          bo.kryjab.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+                      }
+                  });
+              }
+          });
+          event.preventDefault();
+      }) ;
+  }
+
+  $(function(){
+      bo.kryjab.initComp() ;
+      bo.kryjab.initCb() ;
+      bo.kryjab.initFunc() ;
+      bo.kryjab.init();
+  }) ;
+</script>

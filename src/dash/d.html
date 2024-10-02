@@ -1,0 +1,481 @@
+<div class="row row-deck row-cards">
+    <div class="col-sm-6 col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <form id="dform_pj">
+            <div class="d-flex align-items-center">
+              <div class="subheader" id="pj_ket"></div>
+              <div class="ms-auto lh-1">
+                <!-- Bulan Ini -->
+                <div class="dropdown">                
+                  <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="javascript:bo.d.pj('h');">Hari Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.pj('b');">Bulan Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.pj('t');">Tahun Ini</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="h1 mb-3" id="pj_fkt">0</div>
+            <div class="d-flex mb-2">
+              <div>Total Penjualan</div>
+              <div class="ms-auto">
+                <span class="text-green d-inline-flex align-items-center lh-1 h1" id="pj_nom">
+                  Rp. 0
+                  </span>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="subheader" id="pb_ket"></div>
+              <div class="ms-auto lh-1">
+                <div class="dropdown">
+                  <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="javascript:bo.d.pb('h');">Hari Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.pb('b');">Bulan Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.pb('t');">Tahun Ini</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="h1 mb-3" id="pb_fkt">0</div>
+            <div class="d-flex mb-2">
+              <div>Total Pembelian</div>
+              <div class="ms-auto">
+                <span class="text-red d-inline-flex align-items-center lh-1 h1" id="pb_nom">
+                  Rp. 0
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="subheader" id="pj_r_ket"></div>
+            <div class="ms-auto lh-1">
+              <div class="dropdown">
+                <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item" href="javascript:bo.d.pj_r('h');">Hari Ini</a>
+                  <a class="dropdown-item" href="javascript:bo.d.pj_r('b');">Bulan Ini</a>
+                  <a class="dropdown-item" href="javascript:bo.d.pj_r('t');">Tahun Ini</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="h1 mb-3" id="pj_r_fkt">0</div>
+          <div class="d-flex mb-2">
+            <div>Total Retur Penjualan</div>
+            <div class="ms-auto">
+              <span class="text-muted d-inline-flex align-items-center lh-1 h1" id="pj_r_nom">
+                Rp. 0
+                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="subheader" id="pb_r_ket"></div>
+            <div class="ms-auto lh-1">
+              <div class="dropdown">
+                <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item" href="javascript:bo.d.pb_r('h');">Hari Ini</a>
+                  <a class="dropdown-item" href="javascript:bo.d.pb_r('b');">Bulan Ini</a>
+                  <a class="dropdown-item" href="javascript:bo.d.pb_r('t');">Tahun Ini</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="h1 mb-3" id="pb_r_fkt">0</div>
+          <div class="d-flex mb-2">
+            <div>Total Retur Pembelian</div>
+            <div class="ms-auto">
+              <span class="text-yellow d-inline-flex align-items-center lh-1 h1" id="pb_r_nom">
+                Rp. 0
+                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6 col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="subheader" id="pp_ket"></div>
+              <div class="ms-auto lh-1">
+                <div class="dropdown">
+                  <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="javascript:bo.d.pp('h');">Hari Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.pp('b');">Bulan Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.pp('t');">Tahun Ini</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="h1 mb-3" id="pp_fkt">0</div>
+            <div class="d-flex mb-2">
+              <div>Total Pelunasan Piutang</div>
+              <div class="ms-auto">
+                <span class="text-blue d-inline-flex align-items-center lh-1 h1" id="pp_nom">
+                  Rp. 0
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="subheader" id="ph_ket"></div>
+              <div class="ms-auto lh-1">
+                <div class="dropdown">
+                  <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
+                  <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="javascript:bo.d.ph('h');">Hari Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.ph('b');">Bulan Ini</a>
+                    <a class="dropdown-item" href="javascript:bo.d.ph('t');">Tahun Ini</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="h1 mb-3" id="ph_fkt">0</div>
+            <div class="d-flex mb-2">
+              <div>Total Pelunasan Hutang</div>
+              <div class="ms-auto">
+                <span class="text-orange d-inline-flex align-items-center lh-1 h1" id="ph_nom">
+                  Rp. 0
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+      <div class="row row-cards">
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-sm">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <span class="bg-primary text-white avatar">
+                    <i class="fa fa-id-card-o fa-lg"></i>
+                  </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium" id="plgn_a"></div>
+                  <div class="text-muted" id="plgn_b"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-sm">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                    <span class="bg-green text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                        <i class="fa fa-shopping-cart fa-lg"></i>
+                    </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium" id="so_a"></div>
+                  <div class="text-muted"  id="so_b"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-sm">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                    <span class="bg-twitter text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                        <i class="fa fa-truck fa-lg"></i>    
+                    </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium" id="pjkrm_a"></div>
+                  <div class="text-muted"  id="pjkrm_b"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card card-sm">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+                    <span class="bg-facebook text-white avatar"><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                        <i class="fa fa-list-alt fa-lg"></i>     
+                    </span>
+                </div>
+                <div class="col">
+                  <div class="font-weight-medium" id="brg_a"></div>
+                  <div class="text-muted"  id="brg_b"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<!-- <script src="./assets/dist/libs/apexcharts/dist/apexcharts.min.js"></script> -->
+<script>
+    bo.d.pj = function(periode){
+        bo.d.pj.period = periode;
+        bo.d.obj.find('#pj_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#pj_nom').html('');
+        bo.d.obj.find('#pj_ket').html('Loading...');
+        br.get({
+            path: bo.d.path + '/pj/'+periode, 
+            success: function(r){
+                // console.log(r);
+                bo.d.obj.find('#pj_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#pj_nom').html("Rp. "+r.nom.number_format());
+                bo.d.obj.find('#pj_ket').html("Penjualan "+r.periode);
+                
+            }
+        });
+    }
+
+    bo.d.pb = function(periode){
+        bo.d.pb.period = periode;
+        bo.d.obj.find('#pb_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#pb_nom').html('');
+        bo.d.obj.find('#pb_ket').html('Loading...');
+        br.get({
+            path: bo.d.path + '/pb/'+periode, 
+            success: function(r){
+                console.log(r);
+                bo.d.obj.find('#pb_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#pb_nom').html("Rp. "+r.nom.number_format());
+                bo.d.obj.find('#pb_ket').html("Pembelian "+r.periode);
+                
+            }
+        });
+    }
+
+    bo.d.pj_r = function(periode){
+        bo.d.pj_r.period = periode;
+        bo.d.obj.find('#pj_r_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#pj_r_nom').html('');
+        bo.d.obj.find('#pj_r_ket').html('Loading...');
+        br.get({
+            path: bo.d.path + '/pj_r/'+periode, 
+            success: function(r){
+                console.log(r);
+                bo.d.obj.find('#pj_r_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#pj_r_nom').html("Rp. "+r.nom.number_format());
+                bo.d.obj.find('#pj_r_ket').html("Retur Penjualan "+r.periode);
+                
+            }
+        });
+    }
+
+    bo.d.pb_r = function(periode){
+        bo.d.pb_r.period = periode;
+        bo.d.obj.find('#pb_r_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#pb_r_nom').html('');
+        bo.d.obj.find('#pb_r_ket').html('Loading...');
+        br.get({
+            path: bo.d.path + '/pb_r/'+periode, 
+            success: function(r){
+                console.log(r);
+                bo.d.obj.find('#pb_r_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#pb_r_nom').html("Rp. "+r.nom.number_format());
+                bo.d.obj.find('#pb_r_ket').html("Retur Pembelian "+r.periode);
+                
+            }
+        });
+    }
+
+    bo.d.pp = function(periode){
+        bo.d.pp.period = periode;
+        bo.d.obj.find('#pp_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#pp_nom').html('');
+        bo.d.obj.find('#pp_ket').html('Loading...');
+        br.get({
+            path: bo.d.path + '/pp/'+periode, 
+            success: function(r){
+                console.log(r);
+                bo.d.obj.find('#pp_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#pp_nom').html("Rp. "+r.nom.number_format());
+                bo.d.obj.find('#pp_ket').html("Pelunasan Piutang "+r.periode);
+                
+            }
+        });
+    }
+
+    bo.d.ph = function(periode){
+        bo.d.ph.period = periode;
+        bo.d.obj.find('#ph_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#ph_nom').html('');
+        bo.d.obj.find('#ph_ket').html('Loading...');
+        br.get({
+            path: bo.d.path + '/ph/'+periode, 
+            success: function(r){
+                console.log(r);
+                bo.d.obj.find('#ph_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#ph_nom').html("Rp. "+r.nom.number_format());
+                bo.d.obj.find('#ph_ket').html("Pelunasan Hutang "+r.periode);
+                
+            }
+        });
+    }
+    /********/
+    bo.d.plgn = function(){
+        bo.d.obj.find('#plgn_a').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#plgn_b').html('');
+        br.get({
+            path: bo.d.path + '/plgn', 
+            success: function(r){
+                bo.d.obj.find('#plgn_a').html(r.jml.number_format() + " Pelanggan aktif");
+                bo.d.obj.find('#plgn_b').html(r.pj.number_format() + " Pelanggan order bulan ini");
+                
+            }
+        });
+    }
+
+    bo.d.so = function(){
+        bo.d.obj.find('#so_a').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#so_b').html('');
+        br.get({
+            path: bo.d.path + '/so', 
+            success: function(r){
+                bo.d.obj.find('#so_a').html(r.jml.number_format() + " Sales order bulan ini");
+                bo.d.obj.find('#so_b').html(r.brg.number_format() + " Barang diorder bulan ini");
+                
+            }
+        });
+    }
+
+    bo.d.pjkrm = function(){
+        bo.d.obj.find('#pjkrm_a').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#pjkrm_b').html('');
+        br.get({
+            path: bo.d.path + '/pjkrm', 
+            success: function(r){
+                bo.d.obj.find('#pjkrm_a').html(r.krm.number_format() + " Penjualan dikirim bulan ini");
+                bo.d.obj.find('#pjkrm_b').html(r.tkrm.number_format() + " Penjualan terkirim bulan ini");
+                
+            }
+        });
+    }
+
+    bo.d.brg = function(){
+        bo.d.obj.find('#brg_a').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
+        bo.d.obj.find('#brg_b').html('');
+        br.get({
+            path: bo.d.path + '/brg', 
+            success: function(r){
+                bo.d.obj.find('#brg_a').html(r.brg.number_format() + " Barang");
+                bo.d.obj.find('#brg_b').html(r.brg_0.number_format() + " Barang kosong");
+                
+            }
+        });
+    }
+
+    bo.d.initComp = function(){
+      this.obj.find('.sb').select2();
+
+    }
+
+    bo.d.initCb = function(){
+        this.obj.on('remove', function(){
+            clearInterval(bo.d.odash);
+        });
+
+        // this.obj.find('.dropdown-item').on('click', function(e){
+        //     bo.d.drp = $(this).data("target");
+        //     console.log($('#drp_pj'));
+            // console.log($(bo.d.drp));
+            // console.log($($(this).data("target")));
+            // switch(e.target.hash){
+            //     case '#tab-1': 
+            //         bo.mbrg.init();
+            //         bo.mbrg.gr1_reload();
+            //     break;
+            //     case '#tab-2':
+            //         setTimeout(function(){
+            //             bo.mbrg.obj.find('#barcode').focus();
+            //             bo.mbrg.gr2_reload();
+            //         }, 1);
+            //     break;
+            // }
+        // });
+    }
+
+    bo.d.initFunc = function(){
+
+            this.pj.period = 'b';
+            this.pj(this.pj.period);
+
+            this.pb.period = 'b';
+            this.pb(this.pb.period);
+
+            this.pj_r.period = 'b';
+            this.pj_r(this.pj_r.period);
+
+            this.pb_r.period = 'b';
+            this.pb_r(this.pb_r.period);
+
+            this.pp.period = 'b';
+            this.pp(this.pp.period);
+
+            this.ph.period = 'b';
+            this.ph(this.ph.period);
+
+            this.plgn();
+            this.so();
+            this.pjkrm();
+            this.brg();
+
+            this.odash = setInterval(function(){
+                bo.d.pj(bo.d.pj.period);
+                bo.d.pb(bo.d.pb.period);
+                bo.d.pj_r(bo.d.pj_r.period);
+                bo.d.pb_r(bo.d.pb_r.period);
+                bo.d.pp(bo.d.pp.period);
+                bo.d.ph(bo.d.ph.period);
+            }, 60000);
+        
+    }
+
+    $(function(){
+        bo.d.initComp();
+        bo.d.initCb();
+        bo.d.initFunc();
+    });
+</script>

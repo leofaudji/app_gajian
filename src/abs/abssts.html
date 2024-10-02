@@ -1,0 +1,247 @@
+<div class="col-md-12"></div> 
+  <div class="card">
+      <ul class="nav nav-tabs " data-bs-toggle="tabs"> 
+          <li class="nav-item">
+          <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
+              Daftar Status Absensi</a> 
+          </li>
+          <li class="nav-item">
+          <a data-target="#tab-2" href="#tab-2" class="nav-link" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-pencil"></i></span>
+              Tambah Status Absensi</a>
+          </li>
+          
+      </ul>
+      <div class="card-body">
+          <div class="tab-content">
+              <div class="tab-pane active" id="tab-1">
+                  <form id="bsearch"> 
+                      
+                  </form>
+                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+              </div>
+              <div class="tab-pane" id="tab-2">
+                  <form id="bform">
+                      <div class="row">
+                          <div class="col-md-2">
+                              <div class="form-group form-group-default required"> 
+                                  <label>Kode</label>
+                                  <input type="text" maxlength="3" name="kode" id="kode" class="form-control" required placeholder="Kode">
+                              </div>
+                          </div>
+                          <div class="col-md-10">
+                              <div class="form-group form-group-default required">
+                                  <label>Nama Status Absensi</label>
+                                  <input type="text" name="keterangan" id="keterangan" class="form-control" required placeholder="Nama Status Absensi">
+                              </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group form-group-default required">
+                                <label>Deskripsi</label>
+                                <input type="text" name="deskripsi" id="deskripsi" class="form-control" placeholder="Deskripsi Status Absensi">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row" style="margin-top:10px;">
+                          <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                      </div> 
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> 
+<script>
+  bo.abssts.gr1_data = null ; 
+bo.abssts.gr1_loadd = function(){
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+}
+
+bo.abssts.gr1_load = function(){
+  this.obj.find('#gr1').w2grid({  
+        name : bo.abssts.id + '_gr1', 
+        limit : 100 , 
+        url : burls + bo.abssts.path + '/gr1',
+        show: {
+              footer : true,
+              toolbar : true,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'cmd', caption: ' ', size: '130px', sortable: false,frozen:true },
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false,frozen:true},
+              { field: 'keterangan', caption: 'Nama Status Absensi', size: '100%', sortable: false}
+              
+          ]
+
+    });     
+} 
+
+bo.abssts.gr1_setd = function(){
+  w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
+} 
+
+bo.abssts.gr1_reload = function(){
+  w2ui[this.id + '_gr1'].reload();
+}	 
+bo.abssts.gr1_refresh	= function(){
+  w2ui[this.id + '_gr1'].refresh();
+}	
+bo.abssts.gr1_destroy = function(){
+  if(w2ui[this.id + '_gr1'] !== undefined){
+    w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.abssts.gr1_render = function(){ 
+  this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
+}
+ 
+bo.abssts.gr1_reloadd	= function(){
+  this.gr1_loadd() ; 
+  this.gr1_setd() ;  
+  this.gr1_reload() ;   
+}
+
+  bo.abssts.kode = 0
+  bo.abssts.init = function(){
+      this.kode = 0;
+      this.obj.find("#kode").val("");
+      this.obj.find("#keterangan").val("");
+      this.obj.find("#deskripsi").val("");
+
+      this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+  }
+
+  bo.abssts.edit = function(kode){
+      br.get({
+          path : bo.abssts.url + '/' + kode,
+          success: function(r){
+              if(Object.keys(r).length > 0){
+                  bo.abssts.kode = r.kode ;
+                  bo.abssts.obj.find("#kode").val(r.kode);
+                  bo.abssts.obj.find("#keterangan").val(r.keterangan);
+                  bo.abssts.obj.find("#deskripsi").val(r.deskripsi);
+
+                  bo.abssts.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
+              }
+          }  
+      }) ;
+  }
+
+  bo.abssts.delete = function(kode){ 
+      swal.fire({
+          title: 'Apakah anda yakin data dihapus ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+      }).then((result)=>{
+          if (result.isConfirmed) { 
+              br.get({
+                  path : bo.abssts.url + '/hapus/' + kode,
+                  success: function(r){
+                      if(r.deleted){
+                          swal.fire({
+                              title: 'Data berhasil dihapus.',
+                              icon: 'success'
+                          });  
+                          bo.abssts.gr1_reloadd();
+                      }else{
+                          swal.fire({
+                              title: 'Data gagal dihapus.',
+                              icon: 'error'
+                          }); 
+                      }
+                      
+                      
+                  }  
+              }) ;
+          }
+      });
+       
+  }
+
+  bo.abssts.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.abssts.url
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd();
+      this.gr1_load();
+  }
+
+  bo.abssts.initCb = function(){
+      this.obj.find('#skd_cabang').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.abssts.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.abssts.init();
+                  bo.abssts.gr1_reload();
+              break;
+              case '#tab-2':
+                  setTimeout(function(){
+                      bo.abssts.obj.find('#kode').focus();
+                  }, 1);
+              break;
+          }
+      }); 
+  }
+
+  bo.abssts.initFunc = function(){
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.abssts.url + "/" + bo.abssts.kode ,
+                      data : bj.getDataJson(this),
+                      success: function(d){
+                          bo.abssts.init();
+                          bo.abssts.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+                      }
+                  });
+              }
+          });
+          event.preventDefault();
+      }) ;
+  }
+
+  $(function(){
+      bo.abssts.initComp() ;
+      bo.abssts.initCb() ;
+      bo.abssts.initFunc() ;
+      bo.abssts.init();
+  }) ;
+</script>

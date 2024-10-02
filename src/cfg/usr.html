@@ -1,0 +1,190 @@
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h2 class="page-title">
+                Pengguna Aplikasi
+            </h2>
+        </div>
+        <div class="col-auto ml-auto d-print-none">
+            
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <form role="form" class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tambah Pengguna</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Pengguna</label>
+                    <input id="username" name="username" type="text" class="form-control" placeholder="Pengguna">
+                </div>
+                <div class="mb-3">
+                    <div class="form-label">Level</div>
+                    <select class="form-select scons" data-placeholder="Level" multiple data-sf="loadLv" name="lv" id="lv"></select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama Lengkap Pengguna</label>
+                    <input id="fullname" name="fullname" type="text" class="form-control" placeholder="Nama Lengkap Pengguna">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kata Sandi <small>*Isi untuk mengganti password</small></label>
+                    <input id="password" name="password" type="text" class="form-control" placeholder="Kata Sandi">
+                </div>
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-primary btn-block">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <div class="card card-default">
+            <div class="card-header ">
+                <div class="card-title">
+                    Daftar Pengguna
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="mydt" class="table card-table table-vcenter text-nowrap datatable" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th style="width:65%">Pengguna</th>
+                            <th style="width:20%">Lv</th>
+                            <th style="width:15%"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    bo.usr.idEdit = 0 ;
+    bo.usr.idGr = bo.usr.obj.find("#mydt") ;
+    bo.usr.grid = function(){
+        this.grid_conf   = {
+            "sDom": "<'table-responsive't><p i>",
+            "destroy": true,
+            "scrollCollapse": true,
+            "iDisplayLength": 5,
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ ",
+                "sInfo": "<b>_START_ - _END_</b> dari _TOTAL_ data"
+            },
+            "ajax": burls + bo.usr.path + "/grid"
+        }
+        
+        this.oGr = this.idGr.dataTable(this.grid_conf);
+    }
+
+    bo.usr.init   = function(){
+        bo.usr.obj.find('#lv').sVal('') ;
+        bo.usr.obj.find('#username').val('') ;
+        bo.usr.obj.find('#password').val('') ;
+        bo.usr.obj.find('#fullname').val('') ;
+    }
+
+    bo.usr.cmdEdit   = function(id){ 
+        bo.usr.init() ; 
+
+        br.get({
+            path : bo.usr.url + "/edit/" + id,
+            success: function(r){
+                bo.usr.idEdit= r.id; 
+                bo.usr.obj.find("#username").val(r.username)
+                bo.usr.obj.find("#username").attr("readOnly", true);
+                bo.usr.obj.find("#fullname").val(r.fullname).focus();
+                bo.usr.obj.find("#lv").sVal(r.lv);
+            }  
+        }) ; 
+    }
+
+    bo.usr.cmdDelete   = function(id){ 
+        
+        swal.fire({
+            title: 'Apakah data sudah benar?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((result)=>{
+            if (result.isConfirmed) {
+                br.get({
+                    path : bo.usr.url + "/delete/" + id,
+                    success: function(r){
+                        bo.usr.init() ;
+                        bo.usr.grid();
+                        swal.fire({
+                                title: 'Data berhasil dihapus',
+                                icon: 'success'
+                            }); 
+                    }  
+                }) ; 
+            }
+        });
+    }
+
+    bo.usr.initFunc = function(){
+        this.grid();
+    }
+
+    bo.usr.initCb = function(){
+        bo.usr.obj.find('.scons').s2({
+            url: bo.usr.path
+        });
+
+        if(app.lv !== '0000'){
+            bo.usr.obj.find('#cmdPengguna').css('display', 'none') ;
+        }
+
+        bo.usr.obj.find('#cmdPengguna').on('click', function(){
+            window.location.hash= "#Y2ZnL3Vzcg==";
+        });
+
+        bo.usr.obj.find('#cmdDashboard').on('click', function(){
+            window.location.href= "";
+        });
+
+        bo.usr.obj.find('#cmdKamar').on('click', function(){
+            window.location.hash= "#a2FtYXI=";
+        });
+        
+        
+        bo.usr.obj.find('form').submit(function(){
+            swal.fire({
+                title: 'Apakah data sudah benar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result)=>{
+                if (result.isConfirmed) {
+                    br.post({
+                        path : bo.usr.path + "/save/" + bo.usr.idEdit,
+                        data : bj.getDataJson(this),
+                        success: function(d){
+                            bo.usr.init() ;
+                            bo.usr.grid();
+
+                            swal.fire({
+                                title: 'Data berhasil disimpan',
+                                icon: 'success'
+                            }); 
+                        }
+                    }) ; 
+                }
+            });
+            event.preventDefault();
+            
+        }) ;
+    }
+
+    $(function(){
+        bo.usr.initFunc();
+        bo.usr.initCb() ;
+        bo.usr.init() ;
+    });
+</script>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+        <meta name="description" content="Aplikasi APOTEK LAB By CV. ILMION KREATIF https://ilmion.com">
+            <meta name="author" content="CV. ILMION KREATIF https://ilmion.com">
+        <title>Masuk - Aplikasi Gajian</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+        <meta name="msapplication-TileColor" content="#206bc4"/>
+        <meta name="theme-color" content="#206bc4"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <meta name="HandheldFriendly" content="True"/>
+        <meta name="MobileOptimized" content="320"/>
+        <meta name="robots" content="noindex,nofollow,noarchive"/>
+        <!-- CSS files -->
+        <link href="./assets/dist/css/tabler.min.css" rel="stylesheet"/>
+        <link href="./assets/dist/css/demo.min.css" rel="stylesheet"/>
+    </head>
+    <body class="antialiased border-top-wide border-primary d-flex flex-column">
+        <div class="flex-fill d-flex flex-column justify-content-center">
+            <div class="container-tight py-6">
+                <div class="text-center mb-4">
+                    <!--
+                        logo
+                    !-->
+                </div>
+                <form class="card card-md" id="form-login" role="form">
+                    <div class="card-body">
+                        <h2 class="text-center">Masuk ke Aplikasi</h2>
+                        <div class="mb-3">
+                        <label class="form-label">Pengguna</label>
+                            <input id="username" name="username" type="username" class="form-control required" placeholder="Pengguna" autocomplete="off" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Kata Sandi</label>
+                            <div class="input-group input-group-flat">
+                                <input id="password" name="password" type="password" class="form-control required"  placeholder="Kata Sandi" required>
+                            </div>
+                        </div>
+                        <div class="form-footer">
+                        <!-- <button type="submit" class="btn btn-primary btn-block">Masuk</button> -->
+                            <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-login"></i>&nbsp;Masuk</button>
+                        </div>
+                    </div>
+                </form>
+                <footer class="footer footer-transparent">
+                    <div class="container text-sm-center">
+                        <div class="mb-4">Copyright © 2021 All rights reserved.</div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <!-- Libs JS -->
+        <script src="./assets/dist/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/plugins/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="assets/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+        <!-- Tabler Core -->
+        <script src="./assets/dist/js/tabler.min.js"></script>
+        <script src="core.js"></script>
+        <script>
+            var burl = window.location.href.replace('login.html','') ;
+            if(burl.indexOf("?") > -1) burl = burl.substr(0, burl.indexOf("?")) ;
+            if(burl.indexOf("#") > -1) burl = burl.substr(0, burl.indexOf("#")) ;
+
+            br  = new restApi({
+                headers: {
+                    "Accept": "application/json; charset=utf-8",
+                    "X-Bismillah-Api-Key": "bismillah-m377-4j76-bb34-c450-7a62-ad3f"
+                },
+                url: burl + 'il/'
+            }) ; 
+        
+            $(function(){
+                $('#form-login').submit(function(){
+                        br.post({
+                            path : 'v1/auth/login',
+                            data : bj.getDataJson(this),
+                            success: function(d){
+                                localStorage.setItem('BismillahSuksesDuniaAkhirat', 'aamiinYaAllah') ; 
+                                window.location.href = burl ;
+                            },
+                            error:function(d){
+                                alert("User tidak ditemukan") ;
+                                $("#password").val("");
+                                $("#username").val("").focus() ;
+                            },  
+                        }) ; 
+                        event.preventDefault();
+                }) ;  
+                
+
+                
+                setTimeout(function(){
+                    $('#username').focus(); 
+                },500) ; 
+            })
+        </script>
+    </body>
+</html>

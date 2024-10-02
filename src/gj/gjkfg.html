@@ -1,0 +1,271 @@
+<div class="col-md-12"></div> 
+  <div class="card">
+      <ul class="nav nav-tabs " data-bs-toggle="tabs"> 
+          <li class="nav-item">
+          <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
+              Daftar Konfig Gaji</a> 
+          </li>
+            
+      </ul> 
+      <div class="card-body">
+          <div class="tab-content">
+              <div class="tab-pane active" id="tab-1">
+                  <form id="bform"> 
+                      
+                  <div class="row">
+                    <br>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <div class="d-flex">
+                          <div>
+                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon alert-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v4"></path><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path><path d="M12 16h.01"></path></svg>
+                          </div>
+                          <div>
+                            <h4 class="alert-title">Perhatian!</h4>
+                            <div class="text-secondary">Data di bawah ini adalah konfigurasi Gaji mohon diatur sesuai kebutuhan dan peraturan yang ada.</div>
+                            <div class="text-secondary">Untuk mengubah data <i>Konfig Gaji</i><b> Klik 2x dan pilih pada kolom yang tersedia.</b> Lalu Simpan.</div>
+                          </div>
+                        </div>
+                    </div>
+
+                    
+                  </div>
+  
+                  <div class="col-md-2">
+                    <div class="form-group form-group-default form-group-default-select2 required">
+                        <label class="form-label required">Kantor</label>
+                        <select class="full-width scons" data-placeholder="Cari Kantor" required 
+                        name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
+                    </div>
+                  </div>
+
+                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:5px;"></div> 
+
+                  <div class="row" style="margin-top:10px;">
+                    <!--
+                        <a href="#" class="btn btn-primary btn-block fs-18 w-100" data-bs-toggle="modal" data-bs-target="#modal-large" onclick="konfirmasi()">
+                            <i class="fa fa-save"></i>&nbsp;Simpan 
+                        </a>
+                    -->
+                    <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                  </div>               
+                  
+                  </form>
+
+                  
+              </div>
+          </div>
+      </div>
+  </div>
+</div> 
+<script>
+bo.gjkfg.kode = 0 ;
+bo.gjkfg.gr1_data = null ; 
+
+var people = [];  
+
+bo.gjkfg.gr1_loadd = function(){
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+}
+
+bo.gjkfg.gr1_load = function(){
+  this.obj.find('#gr1').w2grid({  
+        name : bo.gjkfg.id + '_gr1', 
+        limit : 100 , 
+        url : burls + bo.gjkfg.path + '/gr1',
+        show: {
+              footer : true,
+              toolbar : true,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'kode', caption: 'Kode', size: '60px', sortable: false,frozen:true,style:'text-align:center'},
+              { field: 'keterangan', caption: 'Nama Kantor', size: '300px', sortable: false,frozen:true},
+              { field: 'metode', caption: 'Metode Absensi', size: '150px', sortable: true, resizable: true,editable: { type: 'list', showAll: true, items: people, filter: true }},  
+              { field: 'url', caption: 'URL', size: '100%', sortable: false}
+              
+          ]
+
+    });     
+} 
+
+bo.gjkfg.gr1_setd = function(){ 
+  w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
+} 
+
+bo.gjkfg.gr1_reload = function(){
+  w2ui[this.id + '_gr1'].reload();
+}	 
+bo.gjkfg.gr1_refresh	= function(){
+  w2ui[this.id + '_gr1'].refresh();
+}	
+bo.gjkfg.gr1_destroy = function(){
+  if(w2ui[this.id + '_gr1'] !== undefined){
+    w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.gjkfg.gr1_render = function(){ 
+  this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
+}
+ 
+bo.gjkfg.gr1_reloadd	= function(){
+  this.gr1_loadd() ; 
+  this.gr1_setd() ;  
+  this.gr1_reload() ;   
+}
+
+
+  
+  bo.gjkfg.init = function(){      
+      this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+  }
+
+  bo.gjkfg.edit = function(kode){
+    bo.gjkfg.obj.find('.nav-tabs a[href="#tab-2"]').tab('show'); 
+      br.get({
+          path : bo.gjkfg.url + '/' + kode,
+          success: function(r){
+              if(Object.keys(r).length > 0){
+                  bo.gjkfg.kode = r.kode ;
+                  bo.gjkfg.obj.find("#kode").val(r.kode);
+                  bo.gjkfg.obj.find("#keterangan").val(r.keterangan);
+              }
+          }  
+      }) ;
+  }
+
+  bo.gjkfg.delete = function(kode){ 
+      swal.fire({
+          title: 'Apakah anda yakin data dihapus ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+      }).then((result)=>{
+          if (result.isConfirmed) { 
+              br.get({
+                  path : bo.gjkfg.url + '/hapus/' + kode,
+                  success: function(r){
+                      if(r.deleted){
+                          swal.fire({
+                              title: 'Data berhasil dihapus.',
+                              icon: 'success'
+                          });  
+                          bo.gjkfg.gr1_reloadd();
+                      }else{
+                          swal.fire({
+                              title: 'Data gagal dihapus.',
+                              icon: 'error'
+                          }); 
+                      }
+                      
+                      
+                  }  
+              }) ;
+          }
+      });
+      
+  }
+
+  bo.gjkfg.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.gjkfg.url
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd(); 
+      this.gr1_load();
+      bo.gjkfg.initData() ;
+
+  }
+
+  bo.gjkfg.initCb = function(){
+      this.obj.find('#skd_cabang').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.gjkfg.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.gjkfg.init();
+                  bo.gjkfg.gr1_reload();
+              break;
+          }
+      }); 
+  }
+
+  bo.gjkfg.initFunc = function(){
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.gjkfg.url + "/" + bo.gjkfg.kode ,
+                      data : $.extend(true, bj.getDataJson(this), {'gr1': w2ui[bo.gjkfg.id + '_gr1'].records}),
+                      success: function(d){
+                          bo.gjkfg.init();
+                          bo.gjkfg.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+
+                          swal.fire({
+                              title: 'Data berhasil disimpan.',
+                              icon: 'success'
+                          }); 
+                      }
+                  });
+              }
+          });
+          event.preventDefault(); 
+      }) ;
+  }
+
+  bo.gjkfg.initData = function(){
+    br.get({
+        path : bo.gjkfg.url + '/initdata',
+        success: function(d){
+          $.each(d, function(i, v) {
+            people.push(v);
+          }); 
+
+          w2ui[bo.gjkfg.id + '_gr1'].getColumn('metode').editable.items = people;
+          //w2ui[bo.gjkfg.id + '_gr1'].getColumn('metode').render();  
+        }  
+    }) ;
+    
+  }
+
+  $(function(){ 
+      bo.gjkfg.initComp() ;
+      bo.gjkfg.initCb() ;
+      bo.gjkfg.initFunc() ;
+      bo.gjkfg.init();
+  }) ;
+</script>

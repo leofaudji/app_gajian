@@ -1,0 +1,335 @@
+<div class="col-md-12"></div> 
+  <div class="card">
+      <ul class="nav nav-tabs " data-bs-toggle="tabs"> 
+          <li class="nav-item">
+          <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
+              Daftar Golongan Absensi</a> 
+          </li>
+          <li class="nav-item">
+          <a data-target="#tab-2" href="#tab-2" class="nav-link" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-pencil"></i></span>
+              Tambah Golongan Absensi</a>
+          </li>
+            
+      </ul>
+      <div class="card-body">
+          <div class="tab-content">
+              <div class="tab-pane active" id="tab-1">
+                  <form id="bsearch"> 
+                      
+                  </form>
+                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+              </div>
+              <div class="tab-pane" id="tab-2">
+                  <form id="bform">
+                      <div class="row">
+                          <div class="col-md-2">
+                              <div class="form-group form-group-default required"> 
+                                  <label>Kode</label>
+                                  <input type="text" maxlength="2" name="kode" id="kode" class="form-control" required placeholder="Kode">
+                              </div>
+                          </div>
+                          <div class="col-md-10">
+                              <div class="form-group form-group-default required">
+                                  <label>Nama Golongan Absensi</label>
+                                  <input type="text" name="keterangan" id="keterangan" class="form-control" required placeholder="Nama Golongan Absensi">
+                              </div>
+                          </div>
+                    </div>
+
+                      <div class="row" style="margin-top:10px">
+                        <br>
+                        
+                        <div class="alert alert-warning" role="alert">
+                            <div class="d-flex">
+                              <div>
+                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon alert-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v4"></path><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path><path d="M12 16h.01"></path></svg>
+                              </div>
+                              <div>
+                                <h4 class="alert-title">Perhatian!</h4>
+                                <div class="text-secondary">Data di bawah ini adalah konfigurasi golongan absensi mohon diatur sesuai kebutuhan dan peraturan yang ada.</div>
+                                <div class="text-secondary">Untuk mengubah data <i>jam_masuk, jam_pulang, toleransi keterlembatan</i><b> Klik 2x pada kolom yang tersedia.</b> Lalu Simpan.</div>
+                              </div>
+                            </div>
+                        </div>
+
+                        
+                      </div>
+                    
+                      <div class="row">
+                        <div class="col-md-6">
+                            <div id="gr2" style="min-height: 500px; max-height: 500px;"></div>
+                        </div>
+                      </div>                        
+
+                        
+                    
+                    <div class="row" style="margin-top:10px;">
+                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                    </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> 
+<script>
+bo.absgol.kode = 0 ;
+bo.absgol.gr1_data = null ; 
+bo.absgol.gr1_loadd = function(){
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+}
+
+bo.absgol.gr1_load = function(){
+  this.obj.find('#gr1').w2grid({  
+        name : bo.absgol.id + '_gr1', 
+        limit : 100 , 
+        url : burls + bo.absgol.path + '/gr1',
+        show: {
+              footer : true,
+              toolbar : true,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'cmd', caption: ' ', size: '130px', sortable: false,frozen:true },
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false,frozen:true},
+              { field: 'keterangan', caption: 'Nama Golongan Absensi', size: '100%', sortable: false}
+              
+          ]
+
+    });     
+} 
+
+bo.absgol.gr1_setd = function(){
+  w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
+} 
+
+bo.absgol.gr1_reload = function(){
+  w2ui[this.id + '_gr1'].reload();
+}	 
+bo.absgol.gr1_refresh	= function(){
+  w2ui[this.id + '_gr1'].refresh();
+}	
+bo.absgol.gr1_destroy = function(){
+  if(w2ui[this.id + '_gr1'] !== undefined){
+    w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.absgol.gr1_render = function(){ 
+  this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
+}
+ 
+bo.absgol.gr1_reloadd	= function(){
+  this.gr1_loadd() ; 
+  this.gr1_setd() ;  
+  this.gr1_reload() ;   
+}
+
+bo.absgol.gr2_data = null ; 
+bo.absgol.gr2_loadd = function(){
+  this.gr2_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode:bo.absgol.kode}; 
+}
+
+bo.absgol.gr2_load = function(){
+this.obj.find('#gr2').w2grid({  
+        name : bo.absgol.id + '_gr2', 
+        limit : 100 ,  
+        url : burls + bo.absgol.path + '/gr2',
+        show: {
+              footer : true,
+              toolbar : false,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'hari', caption: 'Hari', size: '100px', sortable: false, style: 'text-align: center'}, 
+              { field: 'jam_masuk', caption: 'Jam Masuk',editable:{type:'time'}, size: '100px', sortable: false, style: 'text-align: center'},
+              { field: 'jam_pulang', caption: 'Jam Pulang',editable:{type:'time'}, size: '100px', sortable: false, style: 'text-align: center'},
+              { field: 'toleransi', caption: 'Toleransi',editable:{type:'time'}, size: '100px', sortable: false, style: 'text-align: center'}
+              
+          ], 
+          onChange: function(event){
+               event.onComplete = function () {                                        
+                   w2ui[event.target].save();
+               }                
+               
+           }
+
+    });  
+
+} 
+
+bo.absgol.gr2_setd = function(){
+  w2ui[this.id + '_gr2'].postData = this.gr2_data ;  
+} 
+
+bo.absgol.gr2_reload = function(){
+  w2ui[this.id + '_gr2'].reload();
+}	 
+bo.absgol.gr2_refresh	= function(){
+  w2ui[this.id + '_gr2'].refresh();
+}	
+bo.absgol.gr2_destroy = function(){
+  if(w2ui[this.id + '_gr2'] !== undefined){
+    w2ui[this.id + '_gr2'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.absgol.gr2_render = function(){ 
+  this.obj.find("#gr2").w2render(this.id + '_gr2') ; 
+}
+ 
+bo.absgol.gr2_reloadd	= function(){
+  this.gr2_loadd() ; 
+  this.gr2_setd() ;  
+  this.gr2_reload() ;   
+}
+
+  
+  bo.absgol.init = function(){
+      this.kode = 0;
+      this.obj.find("#kode").val("");
+      this.obj.find("#keterangan").val("");
+
+      this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+  }
+
+  bo.absgol.edit = function(kode){
+    bo.absgol.obj.find('.nav-tabs a[href="#tab-2"]').tab('show'); 
+      br.get({
+          path : bo.absgol.url + '/' + kode,
+          success: function(r){
+              if(Object.keys(r).length > 0){
+                  bo.absgol.kode = r.kode ;
+                  bo.absgol.obj.find("#kode").val(r.kode);
+                  bo.absgol.obj.find("#keterangan").val(r.keterangan);
+                  bo.absgol.gr2_reloadd() ; 
+              }
+          }  
+      }) ;
+  }
+
+  bo.absgol.delete = function(kode){ 
+      swal.fire({
+          title: 'Apakah anda yakin data dihapus ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+      }).then((result)=>{
+          if (result.isConfirmed) { 
+              br.get({
+                  path : bo.absgol.url + '/hapus/' + kode,
+                  success: function(r){
+                      if(r.deleted){
+                          swal.fire({
+                              title: 'Data berhasil dihapus.',
+                              icon: 'success'
+                          });  
+                          bo.absgol.gr1_reloadd();
+                      }else{
+                          swal.fire({
+                              title: 'Data gagal dihapus.',
+                              icon: 'error'
+                          }); 
+                      }
+                      
+                      
+                  }  
+              }) ;
+          }
+      });
+      
+  }
+
+  bo.absgol.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.absgol.url
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd(); 
+      this.gr1_load();
+
+      this.gr2_destroy();
+      this.gr2_loadd(); 
+      this.gr2_load();
+  }
+
+  bo.absgol.initCb = function(){
+      this.obj.find('#skd_cabang').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.absgol.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.absgol.init();
+                  bo.absgol.gr1_reload();
+              break;
+              case '#tab-2':
+                  setTimeout(function(){
+                      bo.absgol.obj.find('#kode').focus();
+                      bo.absgol.gr2_reload();
+                  }, 1);
+                  
+              break;
+          }
+      }); 
+  }
+
+  bo.absgol.initFunc = function(){
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.absgol.url + "/" + bo.absgol.kode ,
+                      data : $.extend(true, bj.getDataJson(this), {'gr2': w2ui[bo.absgol.id + '_gr2'].records}),
+                      success: function(d){
+                          bo.absgol.init();
+                          bo.absgol.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+                      }
+                  });
+              }
+          });
+          event.preventDefault();
+      }) ;
+  }
+
+  $(function(){
+      bo.absgol.initComp() ;
+      bo.absgol.initCb() ;
+      bo.absgol.initFunc() ;
+      bo.absgol.init();
+  }) ;
+</script>

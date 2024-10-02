@@ -1,0 +1,240 @@
+<div class="col-md-12"></div> 
+  <div class="card">
+      <ul class="nav nav-tabs " data-bs-toggle="tabs"> 
+          <li class="nav-item">
+          <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
+              Daftar Golongan Gaji</a> 
+          </li>
+          <li class="nav-item">
+          <a data-target="#tab-2" href="#tab-2" class="nav-link" data-bs-toggle="tab">
+              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-pencil"></i></span>
+              Tambah Golongan Gaji</a> 
+          </li>
+          
+      </ul>
+      <div class="card-body">
+          <div class="tab-content">
+              <div class="tab-pane active" id="tab-1">
+                  <form id="bsearch"> 
+                      
+                  </form>
+                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+              </div>
+              <div class="tab-pane" id="tab-2">
+                  <form id="bform">
+                      <div class="row">
+                          <div class="col-md-2">
+                            <label class="form-label required" for="kode">Kode:</label>
+                            <input type="text" maxlength="2" name="kode" id="kode" class="form-control" required placeholder="Kode">
+                          </div>
+                          <div class="col-md-10">
+                            <label class="form-label required" for="keterangan">Keterangan Golongan Gaji:</label>
+                            <input type="text" name="keterangan" id="keterangan" class="form-control" required placeholder="Nama Golongan Gaji">
+                          </div>
+                      </div>
+                      <div class="row" style="margin-top:10px;">
+                          <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                      </div> 
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> 
+<script>
+  bo.gjgol.gr1_data = null ; 
+bo.gjgol.gr1_loadd = function(){
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+}
+
+bo.gjgol.gr1_load = function(){
+  this.obj.find('#gr1').w2grid({  
+        name : bo.gjgol.id + '_gr1', 
+        limit : 100 , 
+        url : burls + bo.gjgol.path + '/gr1',
+        show: {
+              footer : true,
+              toolbar : true,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'cmd', caption: ' ', size: '130px', sortable: false,frozen:true },
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false,frozen:true},
+              { field: 'keterangan', caption: 'Golongan Gaji', size: '180px', sortable: false},
+              { field: 'awal', caption: 'Awal', size: '80px', sortable: false},
+              { field: 'akhir', caption: 'Akhir', size: '80px', sortable: false}
+              
+          ]
+
+    });     
+} 
+
+bo.gjgol.gr1_setd = function(){
+  w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
+} 
+
+bo.gjgol.gr1_reload = function(){
+  w2ui[this.id + '_gr1'].reload();
+}	 
+bo.gjgol.gr1_refresh	= function(){
+  w2ui[this.id + '_gr1'].refresh();
+}	
+bo.gjgol.gr1_destroy = function(){
+  if(w2ui[this.id + '_gr1'] !== undefined){
+    w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.gjgol.gr1_render = function(){ 
+  this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
+}
+ 
+bo.gjgol.gr1_reloadd	= function(){
+  this.gr1_loadd() ; 
+  this.gr1_setd() ;  
+  this.gr1_reload() ;   
+}
+
+  bo.gjgol.kode = 0
+  bo.gjgol.init = function(){ 
+      this.kode = 0;
+      this.obj.find("#kode").val("");
+      this.obj.find("#keterangan").val("");
+      this.obj.find("#deskripsi").val("");
+
+      this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+  }
+
+  bo.gjgol.edit = function(kode){
+      br.get({
+          path : bo.gjgol.url + '/' + kode,
+          success: function(r){
+              if(Object.keys(r).length > 0){
+                  bo.gjgol.kode = r.kode ;
+                  bo.gjgol.obj.find("#kode").val(r.kode);
+                  bo.gjgol.obj.find("#keterangan").val(r.keterangan);
+                  bo.gjgol.obj.find("#awal").val(r.awal);
+                  bo.gjgol.obj.find("#akhir").val(r.akhir);
+
+                  bo.gjgol.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
+              }
+          }  
+      }) ;
+  }
+
+  bo.gjgol.delete = function(kode){ 
+      swal.fire({
+          title: 'Apakah anda yakin data dihapus ?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya',
+          cancelButtonText: 'Tidak'
+      }).then((result)=>{
+          if (result.isConfirmed) { 
+              br.get({
+                  path : bo.gjgol.url + '/hapus/' + kode,
+                  success: function(r){
+                      if(r.deleted){
+                          swal.fire({
+                              title: 'Data berhasil dihapus.',
+                              icon: 'success'
+                          });  
+                          bo.gjgol.gr1_reloadd();
+                      }else{
+                          swal.fire({
+                              title: 'Data gagal dihapus.',
+                              icon: 'error'
+                          }); 
+                      }
+                      
+                      
+                  }  
+              }) ;
+          }
+      });
+       
+  }
+
+  bo.gjgol.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.gjgol.url
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd();
+      this.gr1_load();
+  }
+
+  bo.gjgol.initCb = function(){
+      this.obj.find('#skd_cabang').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.gjgol.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.gjgol.init();
+                  bo.gjgol.gr1_reload();
+              break;
+              case '#tab-2':
+                  setTimeout(function(){
+                      bo.gjgol.obj.find('#kode').focus();
+                  }, 1);
+              break;
+          }
+      }); 
+  }
+ 
+  bo.gjgol.initFunc = function(){
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.gjgol.url + "/" + bo.gjgol.kode ,
+                      data : bj.getDataJson(this),
+                      success: function(d){
+                          bo.gjgol.init();
+                          bo.gjgol.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+                      }
+                  });
+              }
+          });
+          event.preventDefault();
+      }) ;
+  }
+
+  $(function(){
+      bo.gjgol.initComp() ;
+      bo.gjgol.initCb() ;
+      bo.gjgol.initFunc() ;
+      bo.gjgol.init();
+  }) ;
+</script>

@@ -1,0 +1,150 @@
+<div class="jumbotron" data-pages="parallax">
+    <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+        <div class="inner">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Konfigurasi</a></li>
+                <li class="breadcrumb-item"><a href="#">Profil <strong class="txt_user"></strong> </a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="container-fluid sm-gutter container-fixed-lg">
+    <div class="card card-success">
+        <div class="card-body">
+            <div class="alert alert-danger" role="alert">
+                <strong>Perhatian: </strong>Dimohon untuk mengganti kata sandi anda secara berkala. Terima Kasih
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div id="wfoto" class="text-center">
+                        <img src="" alt="" class="img-thumbnail">
+                    </div>
+                    </br>
+                    <div class="form-group form-group-default">
+                        <label>Pilih Foto Profil Aplikasi</label>
+                        <input type="file" name="ofile" id="ofile" class="form-control" accept="image/*">
+                    </div>
+                </div>
+                
+                <div class="col-sm-9">
+                    <form class="" role="form">
+                        <div class="form-group form-group-default">
+                            <label class="form-label">PENGGUNA</label>
+                            <div class="txt_user form-control"></div>
+                        </div>
+                        
+                        <div class="form-group form-group-default">
+                            <label class="form-label">NAMA</label>
+                            <div class="txt_nama  form-control"></div>
+                        </div>
+
+                        <div class="form-group form-group-default required bg-danger-lighter">
+                            <label class="form-label">Kata Sandi <small>*Isi untuk mengganti password</small></label>
+                            <input type="text" name="password" id="password" class="form-control" required>
+                        </div>
+
+                        <div class="row" style="margin-top:10px;">
+                            <button id="cmdSave" class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan Kata Sandi Baru</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    bo.me.initCb = function(){
+        //upload file tmp
+        this.obj.find("#ofile").on("change", function(e){
+            
+            e.preventDefault() ;
+            bo.me.f    = e.target.files ;
+            bo.me.fg   = new FormData() ;
+            $.each(bo.me.f, function(k,v){
+                bo.me.fg.append(k, v) ;
+            }) ;
+
+            // loading
+            bo.me.obj.find("#fileing").html("Sedang Mengirim File ...");
+            $(this).prop("disabled", true); 
+            $.ajax({
+                method  : 'POST',
+                url     : burls + bo.me.url + "/upload_f",
+                data    : bo.me.fg, 
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (d) {
+                    if(d.success){
+                        bo.me.obj.find('#wfoto img').attr('src', d.files[0].url );
+                        $('#_myfoto').attr('src', d.files[0].url ); 
+                    }else{
+                        alert(d.message);
+                        bo.me.obj.find("#ofile").val("");
+                    }
+                    bo.me.obj.find("#ofile").prop("disabled", false); 
+                }
+            });
+
+        });
+    }
+
+    bo.me.initFunc = function(){
+        this.obj.find(".txt_user").html(app.aruser.username);
+        this.obj.find(".txt_nama").html(app.aruser.fullname);
+        this.obj.find('#wfoto img').attr('src', app.aruser.datas.foto );
+
+        this.obj.find('#password').focus();
+
+
+        bo.me.obj.find('form').submit(function(){
+            bo.me.datafrm = this;
+            swal.fire({
+                title: 'Apakah mengganti kata sandi?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result)=>{
+                if (result.isConfirmed) {
+                    $(this).find("button").prop('disabled', true);
+                    br.post({
+                        path : bo.me.url + "/savepass",
+                        data : bj.getDataJson(bo.me.datafrm), 
+                        success: function(d){
+                            // alert("Kata sandi sudah diganti, Silahkan login kembali dengan kata sandi baru anda yaitu '"+ bo.me.obj.find('#password').val() + "'");
+                            swal.fire({
+                                title: "Kata sandi sudah diganti, Silahkan login kembali dengan kata sandi baru anda yaitu '"+ bo.me.obj.find('#password').val() + "'",
+                                icon: 'success'
+                            }).then((result)=>{ 
+                                app.logout();
+                            }) ;
+                        }     
+                    }) ; 
+                }
+            });
+            event.preventDefault();
+            
+        }) ;
+        // this.obj.find('form').validate({
+        //     submitHandler: function(form) { 
+        //         if(confirm("Apakah mengganti kata sandi?")){
+        //             $(this).find("button").prop('disabled', true);
+        //             br.post({
+        //                 path : bo.me.url + "/savepass",
+        //                 data : bj.getDataJson(form), 
+        //                 success: function(d){
+        //                     alert("Kata sandi sudah diganti, Silahkan login kembali dengan kata sandi baru anda yaitu '"+ bo.me.obj.find('#password').val() + "'");
+        //                     app.logout();
+        //                 }     
+        //             }) ; 
+        //         }
+        //     }
+        // }) ; 
+    }
+
+    $(function(){
+        bo.me.initCb();
+        bo.me.initFunc();
+    });
+</script>   
