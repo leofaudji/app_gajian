@@ -14,7 +14,6 @@
                   <form id="bform"> 
                       
                   <div class="row">
-                    <br>
                     
                     <div class="alert alert-warning" role="alert">
                         <div class="d-flex">
@@ -25,22 +24,40 @@
                           <div>
                             <h4 class="alert-title">Perhatian!</h4>
                             <div class="text-secondary">Data di bawah ini adalah konfigurasi Gaji mohon diatur sesuai kebutuhan dan peraturan yang ada.</div>
-                            <div class="text-secondary">Untuk mengubah data <i>Konfig Gaji</i><b> Klik 2x dan pilih pada kolom yang tersedia.</b> Lalu Simpan.</div>
+                            <div class="text-secondary">Untuk mengubah data <i>Nominal Gaji</i><b> Klik 2x dan pilih pada kolom yang tersedia.</b> Lalu Simpan.</div>
                           </div>
                         </div>
                     </div>
 
                     
                   </div>
-  
-                  <div class="col-md-2">
-                    <div class="form-group form-group-default form-group-default-select2 required">
-                        <label class="form-label required">Kantor</label>
-                        <select class="full-width scons" data-placeholder="Cari Kantor" required 
-                        name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
+                  
+                  <div class="row">
+                    
+                    <!--
+                      <div class="col-md-2">
+                        <label class="form-label required" for="tgl">Tgl Perubahan:</label>
+                        <input type="text" id="tgl" name="tgl" class="form-control tgl" required>
+                      </div>
+                    -->
+                    
+                    <div class="col-md-2">
+                      <div class="form-group form-group-default form-group-default-select2 required">
+                          <label class="form-label required">Kantor</label>
+                          <select class="full-width scons" data-placeholder="Cari Kantor" required 
+                          name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group form-group-default form-group-default-select2 required">
+                          <label class="form-label required">Golongan Gaji</label>
+                          <select class="full-width scons" data-placeholder="Cari Golongan Gaji" required 
+                          name="golongan" id="golongan" data-sf="loadgajigol"></select>
+                      </div>
                     </div>
                   </div>
-
+                  
                   <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:5px;"></div> 
 
                   <div class="row" style="margin-top:10px;">
@@ -67,7 +84,7 @@ bo.gjkfg.gr1_data = null ;
 var people = [];  
 
 bo.gjkfg.gr1_loadd = function(){
-  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode_kantor:this.obj.find('#kode_kantor').val(),golongan:this.obj.find('#golongan').val()}; 
 }
 
 bo.gjkfg.gr1_load = function(){
@@ -77,17 +94,22 @@ bo.gjkfg.gr1_load = function(){
         url : burls + bo.gjkfg.path + '/gr1',
         show: {
               footer : true,
-              toolbar : true,
+              toolbar : false,
               toolbarColumns : false,
               lineNumbers:true
           }, 
           multiSearch : false,
           columns: [
-              { field: 'kode', caption: 'Kode', size: '60px', sortable: false,frozen:true,style:'text-align:center'},
-              { field: 'keterangan', caption: 'Nama Kantor', size: '300px', sortable: false,frozen:true},
-              { field: 'metode', caption: 'Metode Absensi', size: '150px', sortable: true, resizable: true,editable: { type: 'list', showAll: true, items: people, filter: true }},  
-              { field: 'url', caption: 'URL', size: '100%', sortable: false}
-              
+              { field: 'kode', caption: 'Kode', size: '60px', sortable: false,style:'text-align:center'},
+              { field: 'tambahan', caption: 'Tambahan', size: '250px', sortable: false},
+              { field: 'perhitungan', caption: 'Perhitungan', size: '100px', sortable: false},
+              { field: 'nominal', caption: 'Nominal', size: '150px', sortable: false,style:'text-align:right',editable: { type: 'int', min: 0, max: 10000000}},
+              { field: 'sp', size: '30px'},  
+              { field: 'kodep', caption: 'Kode', size: '60px', sortable: false,style:'text-align:center'},
+              { field: 'potongan', caption: 'Potongan', size: '250px', sortable: false},  
+              { field: 'perhitunganp', caption: 'Perhitungan', size: '100px', sortable: false},
+              { field: 'nominalp', caption: 'Nominal', size: '150px', sortable: false,style:'text-align:right',editable: { type: 'int', min: 0, max: 5000000}}  
+                            
           ]
 
     });     
@@ -122,6 +144,10 @@ bo.gjkfg.gr1_reloadd	= function(){
   
   bo.gjkfg.init = function(){      
       this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+
+      bo.gjkfg.obj.find("#tgl").val("");
+      bo.gjkfg.obj.find("#kode_kantor").val(""); 
+      bo.gjkfg.obj.find("#golongan").val("");
   }
 
   bo.gjkfg.edit = function(kode){
@@ -197,7 +223,6 @@ bo.gjkfg.gr1_reloadd	= function(){
       this.gr1_destroy();
       this.gr1_loadd(); 
       this.gr1_load();
-      bo.gjkfg.initData() ;
 
   }
 
@@ -219,6 +244,13 @@ bo.gjkfg.gr1_reloadd	= function(){
   }
 
   bo.gjkfg.initFunc = function(){
+
+      this.obj.find(' #kode_kantor, #golongan').on('change',function(){
+          setTimeout(function(){
+              bo.gjkfg.gr1_reloadd();
+          });
+      });
+
       this.obj.find('#bform').submit(function(){
           swal.fire({
               title: 'Apakah data sudah benar?',
@@ -247,20 +279,6 @@ bo.gjkfg.gr1_reloadd	= function(){
       }) ;
   }
 
-  bo.gjkfg.initData = function(){
-    br.get({
-        path : bo.gjkfg.url + '/initdata',
-        success: function(d){
-          $.each(d, function(i, v) {
-            people.push(v);
-          }); 
-
-          w2ui[bo.gjkfg.id + '_gr1'].getColumn('metode').editable.items = people;
-          //w2ui[bo.gjkfg.id + '_gr1'].getColumn('metode').render();  
-        }  
-    }) ;
-    
-  }
 
   $(function(){ 
       bo.gjkfg.initComp() ;

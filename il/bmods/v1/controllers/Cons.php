@@ -220,4 +220,24 @@ class Cons extends Bismillah_Controller{
         $this->set_response($vare, Bismillah_Controller::HTTP_OK);  
 
     }
+
+    public function loadgajigol_get(){
+        $this->auth();
+        $va = $this->get() ; 
+        $q = isset($va['q']) ? $va['q'] : "";
+        $d = array();
+
+        if($q !== "") $this->db->or_like( array('keterangan'=>$q) );
+        $db = $this->db->select("kode, keterangan") 
+                            ->from("gj_golongan")
+                            ->limit(10,0)
+                            ->get() ; 
+        foreach($db->result_array() as $r){
+            $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
+        }
+        $vare = array("results"=>$d);
+
+        $this->set_response($vare, Bismillah_Controller::HTTP_OK);  
+
+    }
 }
