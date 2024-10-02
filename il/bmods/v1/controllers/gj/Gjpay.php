@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('CV. ILMION KREATIF - ILMION STUDIO - https://ilmion.com بسم الله الرحمن الرحيم ');
-class Krydat extends Bismillah_Controller{
+class Gjpay extends Bismillah_Controller{
     public function __construct(){
         parent::__construct();  
         $this->auth();
@@ -16,14 +16,14 @@ class Krydat extends Bismillah_Controller{
 
     public function gr1_post(){
         // grid
-        $va = json_decode($this->post()['request'], true);
+        $va = json_decode($this->post()['request'], true); 
         $re = array('total'=>0, 'records'=>array());
 
         $this->lv_e = true;
         $this->lv_d = true;
         if($this->aruser['lv'] !== "0000"){
-            $this->lv_e = boolval(strpos($this->aruser['menu_md5'], md5("krydat.e")));
-            $this->lv_d = boolval(strpos($this->aruser['menu_md5'], md5("krydat.d")));
+            $this->lv_e = boolval(strpos($this->aruser['menu_md5'], md5("gjpay.e")));
+            $this->lv_d = boolval(strpos($this->aruser['menu_md5'], md5("gjpay.d")));
         }
 
         $bs = isset($va['bsearch']) ? $va['bsearch'] : array();
@@ -47,8 +47,8 @@ class Krydat extends Bismillah_Controller{
                     $r['recid'] = $r['id'];
 
                     $r['cmd']                    = '<div class="btn-group w-100">';
-                    if($this->lv_e) $r['cmd']   .= '<button type="button" onClick=bo.krydat.edit("'.$r['kode'].'") class="btn btn-default btn-w2gr w-100">Koreksi</button>';
-                    if($this->lv_d) $r['cmd']   .= '<button type="button" onClick=bo.krydat.delete("'.$r['id'].'") class="btn btn-danger btn-w2gr w-100">Hapus</button>';
+                    if($this->lv_e) $r['cmd']   .= '<button type="button" onClick=bo.gjpay.edit("'.$r['kode'].'") class="btn btn-default btn-w2gr w-100">Koreksi</button>';
+                    if($this->lv_d) $r['cmd']   .= '<button type="button" onClick=bo.gjpay.delete("'.$r['id'].'") class="btn btn-danger btn-w2gr w-100">Hapus</button>';
                     $r['cmd']                   .= '</div>';
 
                     $r['umur']                   = hitung_umur($r['tgl_lahir']) ;

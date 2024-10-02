@@ -174,16 +174,16 @@
   </div>
 </div> 
 <script>
-  bo.krydat.gr1_data = null ; 
-bo.krydat.gr1_loadd = function(){
+  bo.gjpay.gr1_data = null ; 
+bo.gjpay.gr1_loadd = function(){
   this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
 }
 
-bo.krydat.gr1_load = function(){
+bo.gjpay.gr1_load = function(){
   this.obj.find('#gr1').w2grid({  
-        name : bo.krydat.id + '_gr1', 
+        name : bo.gjpay.id + '_gr1', 
         limit : 100 , 
-        url : burls + bo.krydat.path + '/gr1',
+        url : burls + bo.gjpay.path + '/gr1',
         show: {
               footer : true,
               toolbar : true,
@@ -211,39 +211,39 @@ bo.krydat.gr1_load = function(){
     });     
 } 
 
-bo.krydat.gr1_setd = function(){
+bo.gjpay.gr1_setd = function(){
   w2ui[this.id + '_gr1'].postData = this.gr1_data ;  
 } 
 
-bo.krydat.gr1_reload = function(){
+bo.gjpay.gr1_reload = function(){
   w2ui[this.id + '_gr1'].reload();
 }	 
-bo.krydat.gr1_refresh	= function(){
+bo.gjpay.gr1_refresh	= function(){
   w2ui[this.id + '_gr1'].refresh();
 }	
-bo.krydat.gr1_destroy = function(){
+bo.gjpay.gr1_destroy = function(){
   if(w2ui[this.id + '_gr1'] !== undefined){
     w2ui[this.id + '_gr1'].destroy(); //hancurkan grid biar bisa dilihat lagi
   }
 }
-bo.krydat.gr1_render = function(){ 
+bo.gjpay.gr1_render = function(){ 
   this.obj.find("#gr1").w2render(this.id + '_gr1') ; 
 }
  
-bo.krydat.gr1_reloadd	= function(){
+bo.gjpay.gr1_reloadd	= function(){
   this.gr1_loadd() ; 
   this.gr1_setd() ;  
   this.gr1_reload() ;   
 }
 
-  bo.krydat.kode = 0
-  bo.krydat.init = function(){
+  bo.gjpay.kode = 0
+  bo.gjpay.init = function(){
     this.kode = 0;
       
     br.get({ 
-        path : bo.krydat.url + '/initkode',
+        path : bo.gjpay.url + '/initkode',
         success: function(r){
-            bo.krydat.obj.find("#kode").html(r.kode);
+            bo.gjpay.obj.find("#kode").html(r.kode);
         }
     });
 
@@ -267,37 +267,37 @@ bo.krydat.gr1_reloadd	= function(){
     this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
   }
 
-  bo.krydat.edit = function(kode){
+  bo.gjpay.edit = function(kode){
       br.get({
-          path : bo.krydat.url + '/' + kode,
+          path : bo.gjpay.url + '/' + kode,
           success: function(r){
               if(Object.keys(r).length > 0){
-                  bo.krydat.kode = r.kode ;
-                  bo.krydat.obj.find("#kode").html(r.kode);
-                  bo.krydat.obj.find("#kode_kantor").sVal(r.kode_kantor);
-                  bo.krydat.obj.find("#kode").val(r.kode);
-                  bo.krydat.obj.find("#ktp").val(r.ktp);
-                  bo.krydat.obj.find("#nama").val(r.nama);
-                  bo.krydat.obj.find("#alamat_ktp").val(r.alamat_ktp);
-                  bo.krydat.obj.find("#alamat_tinggal").val(r.alamat_tinggal);
-                  bo.krydat.obj.find("#tempat_lahir").val(r.tempat_lahir);
-                  bo.krydat.obj.find("#tgl_lahir").val(r.tgl_lahir);
-                  bo.krydat.obj.find("#jenis_kelamin").val(r.jenis_kelamin);
-                  bo.krydat.obj.find("#agama").sVal(r.agama);
-                  bo.krydat.obj.find("#telepon").val(r.telepon);
-                  bo.krydat.obj.find("#npwp").val(r.npwp);
-                  bo.krydat.obj.find("#email").val(r.email);
-                  bo.krydat.obj.find("#jabatan").sVal(r.jabatan);
-                  bo.krydat.obj.find("#pendidikan").sVal(r.pendidikan);
-                  bo.krydat.obj.find("#golongan").sVal(r.golongan);
+                  bo.gjpay.kode = r.kode ;
+                  bo.gjpay.obj.find("#kode").html(r.kode);
+                  bo.gjpay.obj.find("#kode_kantor").sVal(r.kode_kantor);
+                  bo.gjpay.obj.find("#kode").val(r.kode);
+                  bo.gjpay.obj.find("#ktp").val(r.ktp);
+                  bo.gjpay.obj.find("#nama").val(r.nama);
+                  bo.gjpay.obj.find("#alamat_ktp").val(r.alamat_ktp);
+                  bo.gjpay.obj.find("#alamat_tinggal").val(r.alamat_tinggal);
+                  bo.gjpay.obj.find("#tempat_lahir").val(r.tempat_lahir);
+                  bo.gjpay.obj.find("#tgl_lahir").val(r.tgl_lahir);
+                  bo.gjpay.obj.find("#jenis_kelamin").val(r.jenis_kelamin);
+                  bo.gjpay.obj.find("#agama").sVal(r.agama);
+                  bo.gjpay.obj.find("#telepon").val(r.telepon);
+                  bo.gjpay.obj.find("#npwp").val(r.npwp);
+                  bo.gjpay.obj.find("#email").val(r.email);
+                  bo.gjpay.obj.find("#jabatan").sVal(r.jabatan);
+                  bo.gjpay.obj.find("#pendidikan").sVal(r.pendidikan);
+                  bo.gjpay.obj.find("#golongan").sVal(r.golongan);
 
-                  bo.krydat.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
+                  bo.gjpay.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
               }
           }  
       }) ;
   }
 
-  bo.krydat.delete = function(kode){ 
+  bo.gjpay.delete = function(kode){ 
       swal.fire({
           title: 'Apakah anda yakin data dihapus ?',
           icon: 'warning',
@@ -307,14 +307,14 @@ bo.krydat.gr1_reloadd	= function(){
       }).then((result)=>{
           if (result.isConfirmed) { 
               br.get({
-                  path : bo.krydat.url + '/hapus/' + kode,
+                  path : bo.gjpay.url + '/hapus/' + kode,
                   success: function(r){
                       if(r.deleted){
                           swal.fire({
                               title: 'Data berhasil dihapus.',
                               icon: 'success'
                           });  
-                          bo.krydat.gr1_reloadd();
+                          bo.gjpay.gr1_reloadd();
                       }else{
                           swal.fire({
                               title: 'Data gagal dihapus.',
@@ -330,7 +330,7 @@ bo.krydat.gr1_reloadd	= function(){
       
   }
 
-  bo.krydat.initComp = function(){
+  bo.gjpay.initComp = function(){
       // select2 ke v1/cons
       this.obj.find('.scons').s2({
           url: "v1/Cons"
@@ -338,7 +338,7 @@ bo.krydat.gr1_reloadd	= function(){
 
       // select2 ke dirinya sendiri
       this.obj.find('.sme').s2({
-          url: bo.krydat.url 
+          url: bo.gjpay.url 
       });
 
       // select2 biasa dari option
@@ -358,30 +358,30 @@ bo.krydat.gr1_reloadd	= function(){
       this.gr1_load();
   }
 
-  bo.krydat.initCb = function(){ 
+  bo.gjpay.initCb = function(){ 
       this.obj.find('#kode_kantor').on('select2:selecting', function(e){
           setTimeout(function(){
-              bo.krydat.gr1_reloadd();
+              bo.gjpay.gr1_reloadd();
           }, 5);
       });
 
       this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
           switch(e.target.hash){
               case '#tab-1': 
-                  bo.krydat.init();
-                  bo.krydat.gr1_reload();
+                  bo.gjpay.init();
+                  bo.gjpay.gr1_reload();
               break;
               case '#tab-2':
                   setTimeout(function(){
-                      //bo.krydat.obj.find('#kantor').focus();
-                      bo.krydat.obj.find('#kode_kantor').select2('open');
+                      //bo.gjpay.obj.find('#kantor').focus();
+                      bo.gjpay.obj.find('#kode_kantor').select2('open');
                   }, 1);
               break;
           }
       }); 
   }
 
-  bo.krydat.initFunc = function(){
+  bo.gjpay.initFunc = function(){
       this.obj.find('#bform').submit(function(){
           swal.fire({
               title: 'Apakah data karyawan sudah benar?',
@@ -392,11 +392,11 @@ bo.krydat.gr1_reloadd	= function(){
           }).then((result)=>{
               if (result.isConfirmed) {
                   br.post({
-                      path : bo.krydat.url + "/" + bo.krydat.kode ,
+                      path : bo.gjpay.url + "/" + bo.gjpay.kode ,
                       data : bj.getDataJson(this),
                       success: function(d){
-                          bo.krydat.init();
-                          bo.krydat.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+                          bo.gjpay.init();
+                          bo.gjpay.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
                       }
                   });
               }
@@ -406,10 +406,10 @@ bo.krydat.gr1_reloadd	= function(){
   }
 
   $(function(){
-      bo.krydat.initComp() ;
-      bo.krydat.initCb() ;
-      bo.krydat.initFunc() ;
-      bo.krydat.init();
+      bo.gjpay.initComp() ;
+      bo.gjpay.initCb() ;
+      bo.gjpay.initFunc() ;
+      bo.gjpay.init();
   }) ;
 
 </script>
