@@ -5,179 +5,101 @@
           <a data-target="#tab-1" href="#tab-1" class="nav-link active" data-bs-toggle="tab">
               <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-th"></i></span>
               Daftar Karyawan</a> 
-          </li>
-          <li class="nav-item">
-          <a data-target="#tab-2" href="#tab-2" class="nav-link" data-bs-toggle="tab">
-              <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="fa fa-pencil"></i></span>
-              Tambah Karyawan</a>
-          </li>
-          
+          </li>          
       </ul>
       <div class="card-body">
         <div class="tab-content">
             <div class="tab-pane active" id="tab-1">
-                <form id="bsearch"> 
+                <form id="bform"> 
                     
-                </form>
-                <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
-            </div>
-            <div class="tab-pane" id="tab-2">
-                <form id="bform">
-                    <div class="row">  
+                    <div class="row">
+                    
                         <div class="alert alert-warning" role="alert">
-                            <strong>Perhatian: </strong>Dimohon untuk mengisi data dengan benar dan teliti. Terima Kasih
-                        </div>
- 
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default form-group-default-select2 required">
-                                <label class="form-label required">Kantor</label>
-                                <select class="full-width scons" data-placeholder="Cari Kantor" required 
-                                name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
+                            <div class="d-flex">
+                              <div>
+                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon alert-icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v4"></path><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path><path d="M12 16h.01"></path></svg>
+                              </div>
+                              <div>
+                                <h4 class="alert-title">Perhatian!</h4> 
+                                <div class="text-secondary">Data di bawah ini adalah konfigurasi Gaji tiap karyawan mohon diatur sesuai kebutuhan dan peraturan yang ada.</div>
+                                <div class="text-secondary">Untuk mengubah data <i>Nominal Gaji</i><b> Klik 2x dan pilih pada kolom yang tersedia.</b> Lalu Simpan setiap perubahan karyawan.</div>
+                              </div>
                             </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default required">
-                                <label class="form-label">No. Karyawan:</label>
-                                <div id="kode">&nbsp;</div>
-                                
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <label class="form-label required" for="ktp">No. KTP:</label>
-                            <input type="number" id="ktp" name="ktp" class="form-control" required>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="form-group form-group-default required">
-                                <label class="form-label required">Nama:</label>
-                                <input type="text" name="nama" id="nama" class="form-control" required placeholder="Nama Karyawan">
-                            </div>
-                        </div>
-                
-                        <div class="col-md-6">
-                            <label class="form-label required" for="alamat_ktp">Alamat KTP:</label>
-                            <input type="text" id="alamat_ktp" name="alamat_ktp" class="form-control" required>
-                        </div>
-                
-                        <div class="col-md-6">
-                            <label class="form-label required" for="alamat_tinggal">Alamat Tinggal:</label>
-                            <input type="text" id="alamat_tinggal" name="alamat_tinggal" class="form-control" required>
-                        </div>
-                
-                        <div class="col-md-2">
-                            <label class="form-label required" for="tempat_lahir">Tempat Lahir:</label>
-                            <input type="text" id="tempat_lahir" name="tempat_lahir" class="form-control" required>
-                        </div>
-                
-                        <div class="col-md-2">
-                            <label class="form-label required" for="tgl_lahir">Tanggal Lahir:</label>
-                            <input type="date" id="tgl_lahir" name="tgl_lahir" class="form-control" required>
-                        </div>
-                
-                        <div class="col-md-2">
-                            <label class="form-label">Jenis Kelamin:</label>
-                            <div class="radio-group"> 
-                                <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="jenis_kelamin" checked value="L">
-                                    <span class="form-check-label">Laki-laki</span>
-                                </label>
-                                <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="P">
-                                    <span class="form-check-label">Perempuan</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <div class="form-group form-group-default form-group-default-select2 required">
-                                <label class="form-label required">Agama:</label>
-                                <select class="full-width scons" data-placeholder="Cari Agama" required 
-                                name="agama" id="agama" data-sf="loadagama"></select>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <label class="form-label required" for="telepon">Telepon:</label>
-                            <input type="number" id="telepon" name="telepon" class="form-control" required>
-                        </div>
-                
-                        <div class="col-md-2">
-                            <label class="form-label" for="npwp">NPWP:</label>
-                            <input type="number" id="npwp" name="npwp" class="form-control">
-                        </div>
-                
-                        <div class="col-md-3">
-                            <label class="form-label required" for="email">Email:</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                        </div>
-                        
-                        <div class="col-md-3">
-                            <div class="form-group form-group-default form-group-default-select2 required">
-                                <label class="form-label required">Pendidikan:</label>
-                                <select class="full-width scons" data-placeholder="Cari Pendidikan" required 
-                                name="pendidikan" id="pendidikan" data-sf="loadpendidikan"></select>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-3">
-                            <div class="form-group form-group-default form-group-default-select2 required">
-                                <label class="form-label required">Jabatan:</label>
-                                <select class="full-width scons" data-placeholder="Cari Jabatan" required 
-                                name="jabatan" id="jabatan" data-sf="loadjabatan"></select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group form-group-default form-group-default-select2 required">
-                                <label class="form-label required">Golongan:</label>
-                                <select class="full-width scons" data-placeholder="Cari Golongan" required 
-                                name="golongan" id="golongan" data-sf="loadgajigol"></select>
-                            </div>
-                        </div>
-
+                        </div> 
+    
                         
                     </div>
-                    <div class="row" style="margin-top:10px;">
-                        <!--
-                            <a href="#" class="btn btn-primary btn-block fs-18 w-100" data-bs-toggle="modal" data-bs-target="#modal-large" onclick="konfirmasi()">
-                                <i class="fa fa-save"></i>&nbsp;Simpan 
-                            </a>
-                        -->
-                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
-                    </div>
+
+                    <div class="row">
                     
-                    <div class="modal modal-blur fade" id="modal-large" tabindex="-1" style="display: none;" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header"> 
-                              <h5 class="modal-title">Konfirmasi Data Karyawan</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body" id="data_karyawan">
-                                
-                            </div>
-                            <div class="modal-footer"> 
-                              <button type="button" class="btn me-auto" data-bs-dismiss="modal">Batal</button>
-
-                              <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Proses</button>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group form-group-default form-group-default-select2 required">
+                                <label class="form-label required">Periode</label>
+                                <select class="full-width scons" data-placeholder="Cari Periode Gaji" required 
+                                name="periode" id="periode" data-sf="loadgajiperiode"></select>
                             </div>
                           </div>
+
+                          <div class="col-md-2">
+                          <div class="form-group form-group-default form-group-default-select2 required">
+                              <label class="form-label required">Kantor</label>
+                              <select class="full-width scons" data-placeholder="Cari Kantor" required 
+                              name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
+                          </div>
                         </div>
+    
+                        <div class="col-md-2">
+                          <div class="form-group form-group-default form-group-default-select2 required">
+                              <label class="form-label required">Golongan Gaji</label>
+                              <select class="full-width scons" data-placeholder="Cari Golongan Gaji" required 
+                              name="golongan" id="golongan" data-sf="loadgajigol"></select>
+                          </div>
+                        </div>
+                    
+                        <div class="col-md-2">
+                            <label class="form-label required" for="tgl">Tgl Perubahan:</label>
+                            <input type="text" id="tgl" name="tgl" class="form-control tgl" required>
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="row" style="margin-top: 6px;">
+
+                        <div class="col-md-4">
+                            <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+                        </div>
+
+                        <div class="col-md-8">
+                            <div id="gr2" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+                        </div>
+
+                    </div>
+                    
+                    <div class="row" style="margin-top:10px;">
+                        
+                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                        
                     </div>
 
                 </form>
+
             </div>
         </div>
     </div>
   </div>
 </div> 
 <script>
-  bo.gjpay.gr1_data = null ; 
-bo.gjpay.gr1_loadd = function(){
-  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
-}
+bo.gjpay.gr1_data = null ; 
+bo.gjpay.kode_kantor    = "" ;
+bo.gjpay.golongan_f     = "" ; 
+bo.gjpay.periode        = "" ; 
+ 
+bo.gjpay.gr1_loadd = function(){ 
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode_kantor:this.obj.find('#kode_kantor').val(),golongan_f:this.obj.find('#golongan').val(),periode:this.obj.find('#periode').val()}; 
+} 
 
 bo.gjpay.gr1_load = function(){
   this.obj.find('#gr1').w2grid({  
@@ -191,22 +113,24 @@ bo.gjpay.gr1_load = function(){
               lineNumbers:true
           }, 
           multiSearch : false,
+          lineNumberWidth: 40,
           columns: [
-              { field: 'cmd', caption: ' ', size: '130px', sortable: false},
-              { field: 'kode', caption: 'Kode', size: '100px', sortable: false},
-              { field: 'nama', caption: 'Nama', size: '200px', sortable: false},
-              { field: 'alamat_tinggal', caption: 'Alamat', size: '300px', sortable: false},
-              { field: 'telepon', caption: 'Telepon', size: '120px', sortable: false},
-              { field: 'ttl', caption: 'Tempat, Tgl Lahir', size: '160px', sortable: false},
-              { field: 'jenis_kelamin', caption: 'JK', size: '40px', sortable: false},
-              { field: 'umur', caption: 'Umur', size: '80px', sortable: false},
-              { field: 'agama', caption: 'Agama', size: '80px', sortable: false},
-              { field: 'email', caption: 'Email', size: '140px', sortable: false},
-              { field: 'pendidikan', caption: 'Pendidikan', size: '100px', sortable: false},
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false,style:'text-align:center',frozen:true},
+              { field: 'nama', caption: 'Nama', size: '240px', sortable: false,frozen:true},
+              { field: 'total_gaji', caption: 'Gaji', size: '100px', sortable: false,style:'text-align:right'},
+              { field: 'masakerja', caption: 'Masa Kerja', size: '100px', sortable: false,style:'text-align:right'},
+              { field: 'golongan', caption: 'Golongan', size: '100px', sortable: false},
               { field: 'jabatan', caption: 'Jabatan', size: '100px', sortable: false},
-              { field: 'golongan', caption: 'Jabatan', size: '100px', sortable: false}
+              { field: 'rekening', caption: 'Rekening', size: '120px', sortable: false}
                                                                                     
-          ]
+          ],
+          onClick: function(e){
+            var records = this.get(e.recid) ;    
+            //console.log(records.kode) ; 
+            bo.gjpay.kode = records.kode ;  
+            bo.gjpay.golongan = records.golongan ;  
+            bo.gjpay.gr2_reloadd() ;
+          }
 
     });     
 } 
@@ -236,35 +160,80 @@ bo.gjpay.gr1_reloadd	= function(){
   this.gr1_reload() ;   
 }
 
-  bo.gjpay.kode = 0
+bo.gjpay.gr2_data = null ; 
+bo.gjpay.kode     = "" ;
+bo.gjpay.golongan = "" ;
+bo.gjpay.gr2_loadd = function(){ 
+  this.gr2_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode:bo.gjpay.kode,golongan:bo.gjpay.golongan,kode_kantor:this.obj.find('#kode_kantor').val(),periode:this.obj.find('#periode').val()}; 
+}
+
+bo.gjpay.gr2_load = function(){
+  this.obj.find('#gr2').w2grid({  
+        name : bo.gjpay.id + '_gr2', 
+        limit : 100 , 
+        url : burls + bo.gjpay.path + '/gr2',
+        show: {
+              footer : true,
+              toolbar : false,
+              toolbarColumns : false,
+              lineNumbers:true
+          }, 
+          multiSearch : false,
+          columns: [
+              { field: 'kode', caption: 'Kode', size: '50px', sortable: false,style:'text-align:center'},
+              { field: 'tambahan', caption: 'Tambahan', size: '200px', sortable: false},
+              { field: 'perhitungan', caption: 'Jml', size: '50px', sortable: false,style:'text-align:right'},
+              { field: 'nominal', caption: 'Nominal', size: '80px', sortable: false,style:'text-align:right',editable: { type: 'int', min: 0, max: 10000000},render(record, extra) {
+                //console.log(record);
+                //console.log(extra);
+                return record.nominal || 0 ;
+                }},
+              { field: 'sp', size: '20px'},  
+              { field: 'jumlah', caption: 'Jumlah', size: '100px', sortable: false,style:'text-align:right'},
+              { field: 'kodep', caption: 'Kode', size: '50px', sortable: false,style:'text-align:center'},
+              { field: 'potongan', caption: 'Potongan', size: '200px', sortable: false},  
+              { field: 'perhitunganp', caption: 'Jml', size: '50px', sortable: false,style:'text-align:right'},
+              { field: 'nominalp', caption: 'Nominal', size: '80px', sortable: false,style:'text-align:right',editable: { type: 'int', min: 0, max: 5000000}},
+              { field: 'jumlahp', caption: 'Jumlah', size: '100px', sortable: false,style:'text-align:right'}
+                                                                                    
+          ]
+
+    });     
+} 
+
+bo.gjpay.gr2_setd = function(){
+  w2ui[this.id + '_gr2'].postData = this.gr2_data ;  
+} 
+
+bo.gjpay.gr2_reload = function(){
+  w2ui[this.id + '_gr2'].reload();
+}	 
+bo.gjpay.gr2_refresh	= function(){
+  w2ui[this.id + '_gr2'].refresh();
+}	
+bo.gjpay.gr2_destroy = function(){
+  if(w2ui[this.id + '_gr2'] !== undefined){
+    w2ui[this.id + '_gr2'].destroy(); //hancurkan grid biar bisa dilihat lagi
+  }
+}
+bo.gjpay.gr2_render = function(){ 
+  this.obj.find("#gr2").w2render(this.id + '_gr2') ; 
+}
+ 
+bo.gjpay.gr2_reloadd	= function(){ 
+  this.gr2_loadd() ; 
+  this.gr2_setd() ;  
+  this.gr2_reload() ;   
+}
+
   bo.gjpay.init = function(){
     this.kode = 0;
-      
-    br.get({ 
-        path : bo.gjpay.url + '/initkode',
-        success: function(r){
-            bo.gjpay.obj.find("#kode").html(r.kode);
-        }
-    });
-
-    with(this.obj){
-        find("#kode_kantor").sVal("");
-        find("#ktp").val("");
-        find("#nama").val("");
-        find("#alamat_ktp").val("");
-        find("#alamat_tinggal").val("");
-        find("#tempat_lahir").val("");
-        find("#tgl_lahir").val("");
-        find("#agama").val("");
-        find("#telepon").val("");
-        find("#npwp").val("");
-        find("#email").val("");
-        find("#jabatan").sVal("");
-        find("#pendidikan").sVal("");
-        find("#golongan").sVal("");
-    }
-
+ 
     this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
+
+    if(bo.gjpay.periode == ""){
+        this.obj.find('#periode').select2('open') ;
+    }
   }
 
   bo.gjpay.edit = function(kode){
@@ -274,25 +243,8 @@ bo.gjpay.gr1_reloadd	= function(){
               if(Object.keys(r).length > 0){
                   bo.gjpay.kode = r.kode ;
                   bo.gjpay.obj.find("#kode").html(r.kode);
-                  bo.gjpay.obj.find("#kode_kantor").sVal(r.kode_kantor);
-                  bo.gjpay.obj.find("#kode").val(r.kode);
-                  bo.gjpay.obj.find("#ktp").val(r.ktp);
-                  bo.gjpay.obj.find("#nama").val(r.nama);
-                  bo.gjpay.obj.find("#alamat_ktp").val(r.alamat_ktp);
-                  bo.gjpay.obj.find("#alamat_tinggal").val(r.alamat_tinggal);
-                  bo.gjpay.obj.find("#tempat_lahir").val(r.tempat_lahir);
-                  bo.gjpay.obj.find("#tgl_lahir").val(r.tgl_lahir);
-                  bo.gjpay.obj.find("#jenis_kelamin").val(r.jenis_kelamin);
-                  bo.gjpay.obj.find("#agama").sVal(r.agama);
-                  bo.gjpay.obj.find("#telepon").val(r.telepon);
-                  bo.gjpay.obj.find("#npwp").val(r.npwp);
-                  bo.gjpay.obj.find("#email").val(r.email);
-                  bo.gjpay.obj.find("#jabatan").sVal(r.jabatan);
-                  bo.gjpay.obj.find("#pendidikan").sVal(r.pendidikan);
-                  bo.gjpay.obj.find("#golongan").sVal(r.golongan);
-
-                  bo.gjpay.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
-              }
+                  bo.gjpay.obj.find("#kode_kantor").sVal(r.kode_kantor);              
+                }
           }  
       }) ;
   }
@@ -356,13 +308,17 @@ bo.gjpay.gr1_reloadd	= function(){
       this.gr1_destroy();
       this.gr1_loadd();
       this.gr1_load();
+
+      this.gr2_destroy(); 
+      this.gr2_loadd();
+      this.gr2_load();
   }
 
   bo.gjpay.initCb = function(){ 
-      this.obj.find('#kode_kantor').on('select2:selecting', function(e){
+      this.obj.find('#kode_kantor,#golongan,#periode').on('select2:selecting', function(e){ 
           setTimeout(function(){
-              bo.gjpay.gr1_reloadd();
-          }, 5);
+              bo.gjpay.gr1_reloadd(); 
+          });
       });
 
       this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
@@ -384,7 +340,7 @@ bo.gjpay.gr1_reloadd	= function(){
   bo.gjpay.initFunc = function(){
       this.obj.find('#bform').submit(function(){
           swal.fire({
-              title: 'Apakah data karyawan sudah benar?',
+              title: 'Apakah data sudah benar?',
               icon: 'warning',
               showCancelButton: true,
               confirmButtonText: 'Ya',
@@ -393,10 +349,17 @@ bo.gjpay.gr1_reloadd	= function(){
               if (result.isConfirmed) {
                   br.post({
                       path : bo.gjpay.url + "/" + bo.gjpay.kode ,
-                      data : bj.getDataJson(this),
+                      data : $.extend(true, bj.getDataJson(this), {'gr2': w2ui[bo.gjpay.id + '_gr2'].records}),
                       success: function(d){
                           bo.gjpay.init();
                           bo.gjpay.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+
+                          swal.fire({
+                              title: 'Data berhasil disimpan.',
+                              icon: 'success'
+                          }); 
+                          bo.gjpay.gr1_reloadd() ;
+                          bo.gjpay.gr2_reloadd() ;
                       }
                   });
               }

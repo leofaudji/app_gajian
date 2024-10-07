@@ -4,6 +4,7 @@ class Gjpay extends Bismillah_Controller{
         parent::__construct();  
         $this->auth();
         $this->load->model('v1/Bdb') ; 
+        $this->load->model('v1/Gj') ;  
     }
 
     public function gr1_where($bs, $s){ 
@@ -19,16 +20,17 @@ class Gjpay extends Bismillah_Controller{
         $va = json_decode($this->post()['request'], true); 
         $re = array('total'=>0, 'records'=>array());
 
-        $this->lv_e = true;
-        $this->lv_d = true;
-        if($this->aruser['lv'] !== "0000"){
-            $this->lv_e = boolval(strpos($this->aruser['menu_md5'], md5("gjpay.e")));
-            $this->lv_d = boolval(strpos($this->aruser['menu_md5'], md5("gjpay.d")));
-        }
-
         $bs = isset($va['bsearch']) ? $va['bsearch'] : array();
         $s = isset($va['search']) ? $va['search'][0]['value'] : ''; 
-        $this->gr1_where($bs, $s);
+
+        $kode_kantor    = $va['kode_kantor'] ?? "" ;   
+        $golongan       = $va['golongan_f']  ?? "" ;
+        $periode        = $va['periode']  ?? "" ;
+
+        $this->gr1_where($bs, $s); 
+        $this->db->where('kode_kantor', $kode_kantor); 
+        $this->db->where('golongan', $golongan);
+
         $db = $this->Bdb->db->select("count(id) jml")
                             ->from("mst_karyawan")
                             ->get();
@@ -38,24 +40,113 @@ class Gjpay extends Bismillah_Controller{
             if($r['jml'] > 0){
                 $re['total'] = $r['jml'];
                 $this->gr1_where($bs, $s);
+                $this->db->where('kode_kantor', $kode_kantor); 
+                $this->db->where('golongan', $golongan);
                 $db = $this->Bdb->db->select("*")
                                     ->from("mst_karyawan")
                                     ->limit($va['limit'], $va['offset'])
-                                    ->order_by('id DESC')
+                                    ->order_by('id ASC')
                                     ->get();  
                 foreach($db->result_array() as $r){
-                    $r['recid'] = $r['id'];
-
-                    $r['cmd']                    = '<div class="btn-group w-100">';
-                    if($this->lv_e) $r['cmd']   .= '<button type="button" onClick=bo.gjpay.edit("'.$r['kode'].'") class="btn btn-default btn-w2gr w-100">Koreksi</button>';
-                    if($this->lv_d) $r['cmd']   .= '<button type="button" onClick=bo.gjpay.delete("'.$r['id'].'") class="btn btn-danger btn-w2gr w-100">Hapus</button>';
-                    $r['cmd']                   .= '</div>';
-
-                    $r['umur']                   = hitung_umur($r['tgl_lahir']) ;
-                    $r['ttl']                    = $r['tempat_lahir'] . ", " . date_2s($r['tgl_lahir'],"d-m-Y") ;  
+                    $r['recid'] = $r['id'] ;
+ 
+                    $datagaji           = $this->Gj->get_gaji($r['kode_kantor'],$periode,$r['kode'],$r['golongan']) ;    
+                    $r['total_gaji']    = number_format($datagaji['gaji']['total_gaji'],0) ;                    
+                    $r['masakerja']     = hitung_umur($r['tgl_masuk']) ;
                     //append
-                    $re['records'][]   = $r ;  
+                    $re['records'][]    = $r ;  
                 }
+            }
+        }
+
+        $this->set_response($re, Bismillah_Controller::HTTP_OK);
+    }
+
+    public function gr2_post(){
+        // grid
+        $va = json_decode($this->post()['request'], true);
+        $re = array('total'=>0, 'records'=>array());
+
+        $this->db->where("dk","D");
+        $db = $this->Bdb->db->select("count(id) jml")
+                            ->from("gj_komponen")                                    
+                            ->get();
+        $r          = $db->row_array();
+        $kode_kantor= $va['kode_kantor'] ?? "" ; 
+        $kode       = $va['kode'] ?? "" ;
+        $golongan   = $va['golongan'] ?? "" ;
+        $periode    = $va['periode'] ?? "" ;
+
+        $datagaji = $this->Gj->get_gaji($kode_kantor,$periode,$kode,$golongan) ;  
+
+        //print_r($datagaji) ;
+
+        if(isset($r)){
+            $r['jml']   = intval($r['jml']);
+            if($r['jml'] > 0){
+                $re['total'] = $r['jml'];
+                $i = 0 ;
+                $data = array() ;
+                $db = $this->Bdb->db->select("k.*,n.nominal")
+                                    ->from("gj_komponen k")
+                                    ->join("gj_komponen_nominal n","n.komponen = k.kode and n.golongan = '$golongan'","left") 
+                                    ->limit($va['limit'], $va['offset'])
+                                    ->order_by('k.id ASC') 
+                                    ->get();  
+                foreach($db->result_array() as $r){
+                    
+                    $r1['recid'] = $i++ ; 
+                    $r1['kode'] = $r['kode'] ;
+                    $r1['dk'] = $r['dk'] ;
+                    $r1['tambahan'] = $r['keterangan'] ;
+                    $r1['perhitungan'] = $r['perhitungan'] ; 
+                    $r1['potongan'] = $r['keterangan'] ;
+                    $r1['perhitunganp'] = $r['perhitungan'] ;
+                    $r1['nominal'] = $datagaji['gaji'][$r['kode']] ?? $r['nominal'] ;   
+                    $r1['nominalp'] = $datagaji['gaji'][$r['kode']] ?? $r['nominal'] ;   
+
+                    //append
+                    $re['records'][]   = $r1 ;        
+
+                    $data[$r['dk']][$r['kode']] = $r1 ;  
+                }
+
+                //print_r($data) ; 
+                $data1 = array() ;
+                foreach($data as $key=>$value){
+                  if($key == "D"){
+                    $n = 0 ;
+                    foreach($value as $key1=>$value1){
+                      $data1[$n]['recid']       = $value1['recid'] ;
+                      $data1[$n]['kode']        = $value1['kode'] ;
+                      $data1[$n]['dk']          = $value1['dk'] ; 
+                      $data1[$n]['tambahan']    = $value1['tambahan'] ; 
+                      $data1[$n]['perhitungan'] = ($value1['perhitungan'] == 'harian') ? $datagaji['absensi']['masuk'] : 1 ;
+                      $data1[$n]['nominal']     = number_format($value1['nominal'],0) ;
+                      $data1[$n]['jumlah']      = number_format($value1['nominal'] * $data1[$n]['perhitungan'],0) ;
+                      $data1[$n]['kodep']       = "" ;
+                      $data1[$n]['dkp']         = "" ; 
+                      $data1[$n]['potongan']    = "" ;
+                      $data1[$n]['perhitunganp']= "" ; 
+                      $data1[$n]['nominalp']    = "" ;
+                      $data1[$n]['jumlahp' ]    = "" ;
+                      $n++ ;                      
+                    }
+                  }else{
+                    $n = 0 ;
+                    foreach($value as $key1=>$value1){
+                      $data1[$n]['kodep']       = $value1['kode'] ;   
+                      $data1[$n]['dkp']         = $value1['dk'] ; 
+                      $data1[$n]['potongan']    = $value1['potongan'] ;
+                      $data1[$n]['perhitunganp'] = ($value1['perhitunganp'] == 'harian') ? $datagaji['absensi']['masuk'] : 1 ; 
+                      $data1[$n]['nominalp']    = number_format($value1['nominalp'],0) ; 
+                      $data1[$n]['jumlahp']     = number_format($value1['nominalp'] * $data1[$n]['perhitunganp'],0) ;
+                      $n++ ;                      
+                    }
+                  } 
+                }
+                //print_r($data1);
+                $re['records'] = $data1 ; 
             }
         }
 
@@ -89,34 +180,39 @@ class Gjpay extends Bismillah_Controller{
         $this->set_response(['deleted' => $lresult], Bismillah_Controller::HTTP_OK);    
     }
 
-    public function index_post($kode){ 
+    public function index_post($kode){
         // saving
-        $va = $this->post();
-        $va['kode'] = $this->Bdb->getIncrement("karyawan-" . $va['kode_kantor'], true, 10);
-        $va['username'] = $this->aruser['username'];
-        //print_r($va) ; 
-        $this->Bdb->upsert('mst_karyawan', $va, array("kode"=>$kode)) ; 
+        $va = $this->post(); 
+        
+        //print("kode kry : " . $kode . "<br>") ;  
+        //print_r($va['gr2']) ;  
+        $username     = $this->aruser['username'] ; 
+
+        $tgl        = date_2s($va['tgl']) ;
+        $golongan   = $va['golongan'] ;      
+        
+        foreach($va['gr2'] as $key=>$value){       
+            $komponen = $value['kode']  ;   
+            $where    = array("kode_kry"=>$kode,"komponen"=>$komponen) ; 
+            $nominal  = $value['w2ui']['changes']['nominal'] ?? $value['nominal'] ;           
+            $jml  = $value['w2ui']['changes']['perhitungan'] ?? $value['perhitungan'] ;           
+                        
+            $va2 = array("tgl"=>$tgl,"kode_kry"=>$kode,"komponen"=>$komponen,"nominal"=>$nominal,"perhitungan"=>$jml,"username"=>$username) ;    
+            $this->Bdb->upsert('gj_komponen_nominal_kry', $va2, $where) ;     
+            
+            if($value['dkp'] == "K"){
+              $komponen = $value['kodep']  ;      
+              $where    = array("kode_kry"=>$kode,"komponen"=>$komponen) ; 
+              $nominalp = $value['w2ui']['changes']['nominalp'] ?? $value['nominalp']  ;             
+              $jmlp     = $value['w2ui']['changes']['perhitunganp'] ?? $value['perhitunganp'] ;           
+              $va3 = array("tgl"=>$tgl,"kode_kry"=>$kode,"komponen"=>$komponen,"nominal"=>$nominalp,"perhitungan"=>$jmlp,"username"=>$username) ;    
+              $this->Bdb->upsert('gj_komponen_nominal_kry', $va3, $where) ;      
+            }
+        }
 
         // response
-        $this->set_response(['saved' => true], Bismillah_Controller::HTTP_OK);
+        $this->set_response(['saved' => true], Bismillah_Controller::HTTP_OK); 
     }
 
-    public function initkode_get(){ 
-        $kode =  $this->Bdb->getIncrement("karyawan", false, 10);
-        $this->set_response(['kode'=>$kode], Bismillah_Controller::HTTP_OK);
-
-        // konversi data karyawan
-        /*$conn = mysqli_connect("aa.akt.sis1.net","Assist","Irac","assist_akt") ;
-        $db = mysqli_query($conn,"select * from hrd_karyawan order by NIP") ; 
-        while($row = mysqli_fetch_array($db)){ 
-            //$kode = $this->Bdb->getIncrement("karyawan-01", true, 10);
-        
-            $va = array("kode"=>$row['NIP'],"kode_lama"=>$row['NIP'],"tgl_masuk"=>$row['Tgl'],"nama"=>$row['Nama'],
-                        "alamat_ktp"=>$row['Alamat'],"alamat_tinggal"=>$row['AlamatTinggal'],"agama"=>$row['Agama'],
-                        "tempat_lahir"=>$row['TempatLahir'],"tgl_lahir"=>$row['TglLahir'],"ktp"=>$row['NoKTP'],"npwp"=>$row['NPWP'],
-                        "email"=>$row['email'],"jenis_kelamin"=>$row['JenisKelamin'],"telepon"=>$row['NoTelp']) ;
-            $this->Bdb->upsert('mst_karyawan', $va, array("kode"=>$row['NIP'])) ; 
-        }*/
-    }
 
 }

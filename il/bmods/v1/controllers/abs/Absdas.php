@@ -18,10 +18,12 @@ class Absdas extends Bismillah_Controller{
         // grid
         $va = json_decode($this->post()['request'], true);
         $re = array('total'=>0, 'records'=>array());
-
+        //print_r($va) ;
         $bs = isset($va['bsearch']) ? $va['bsearch'] : array();
         $s = isset($va['search']) ? $va['search'][0]['value'] : '';
         $this->gr1_where($bs, $s);
+        $this->db->where('a.tgl >=', date_2s($va['tgl_awal'])) ;
+        $this->db->where('a.tgl <=', date_2s($va['tgl_akhir'])) ;
         $db = $this->Bdb->db->select("count(a.id) jml")
                                     ->from("abs_tmp a")
                                     ->join("mst_karyawan m","m.kode = a.kode_kry","left") 
@@ -32,12 +34,14 @@ class Absdas extends Bismillah_Controller{
             if($r['jml'] > 0){
                 $re['total'] = $r['jml'];
                 $this->gr1_where($bs, $s);
+                $this->db->where('a.tgl >=', date_2s($va['tgl_awal'])) ;
+                $this->db->where('a.tgl <=', date_2s($va['tgl_akhir'])) ;
                 $db = $this->Bdb->db->select("a.*,m.nama,ms.keterangan abs_status")
                                     ->from("abs_tmp a")
                                     ->join("mst_karyawan m","m.kode = a.kode_kry","left") 
                                     ->join("mst_abs_status ms","ms.kode = a.abs_status","left")  
                                     ->limit($va['limit'], $va['offset'])
-                                    ->order_by('a.id DESC') 
+                                    ->order_by('a.tgl DESC,a.jam DESC') 
                                     ->get();  
                 foreach($db->result_array() as $r){
                     $r['recid'] = $r['id'];  
@@ -51,11 +55,11 @@ class Absdas extends Bismillah_Controller{
 
         // konversi data karyawan
         /*$conn = mysqli_connect("aa.akt.sis1.net","Assist","Irac","assist_akt") ;
-        $db = mysqli_query($conn,"select * from hrd_absensi_tmp where tgl = '2024-10-01' order by NIP") ; 
+        $db = mysqli_query($conn,"select * from hrd_absensi_tmp where tgl >= '2024-09-20' and tgl <= '2024-10-04' order by NIP") ; 
         while($row = mysqli_fetch_array($db)){ 
         
             $va = array("kode_kry"=>$row['NIP'],"tgl"=>$row['Tgl'],"jam"=>$row['Jam'],"tgl_absen"=>$row['TglAbsen'],
-                        "abs_status"=>"001","keterangan"=>$row['Keterangan'],"kode_kantor"=>$row['Cabang']) ;
+                        "abs_status"=>substr($row['Status'],1),"keterangan"=>$row['Keterangan'],"kode_kantor"=>$row['Cabang']) ;
             $this->Bdb->upsert('abs_tmp', $va, array("kode_kry"=>$row['NIP'],"tgl"=>$row['Tgl'])) ;  
         }*/
 

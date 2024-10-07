@@ -41,7 +41,7 @@ class Krydat extends Bismillah_Controller{
                 $db = $this->Bdb->db->select("*")
                                     ->from("mst_karyawan")
                                     ->limit($va['limit'], $va['offset'])
-                                    ->order_by('id DESC')
+                                    ->order_by('id ASC') 
                                     ->get();  
                 foreach($db->result_array() as $r){
                     $r['recid'] = $r['id'];

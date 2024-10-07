@@ -13,8 +13,9 @@
               <div class="tab-pane active" id="tab-1">
                   <form id="bform"> 
                       
+                  
+                  
                   <div class="row">
-                    <br>
                     
                     <div class="alert alert-warning" role="alert">
                         <div class="d-flex">
@@ -29,11 +30,25 @@
                           </div>
                         </div>
                     </div>
-
                     
                   </div>
 
-                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
+                  <div class="row">
+
+                    <div class="col-md-2">
+                        <label class="form-label required" for="tgl">Tgl Awal:</label>
+                        <input type="text" id="tgl_awal" name="tgl_awal" class="form-control tgl" required>
+                    </div>  
+
+                    <div class="col-md-2">
+                        <label class="form-label required" for="tgl">Tgl Akhir:</label>
+                        <input type="text" id="tgl_akhir" name="tgl_akhir" class="form-control tgl" required>
+                    </div>  
+
+                  </div>
+
+
+                  <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:8px;"></div> 
 
                   <div class="row" style="margin-top:10px;">
                     <!--
@@ -55,18 +70,18 @@
 <script>
 bo.absdas.kode = 0 ;
 bo.absdas.gr1_data = null ; 
-
-var people = [];  
+var people = [];   
 
 bo.absdas.gr1_loadd = function(){
-  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch'))}; 
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')), tgl_awal:this.obj.find('#tgl_awal').val(), tgl_akhir:this.obj.find('#tgl_akhir').val()};  
 }
 
 bo.absdas.gr1_load = function(){
   this.obj.find('#gr1').w2grid({  
         name : bo.absdas.id + '_gr1', 
         limit : 100 , 
-        url : burls + bo.absdas.path + '/gr1',
+        url : burls + bo.absdas.path + '/gr1/?tgl=' + this.obj.find('#tgl_awal').val(),
+        postData: { tgl_awal:this.obj.find('#tgl_awal').val(), tgl_akhir:this.obj.find('#tgl_akhir').val() },
         show: {
               footer : true,
               toolbar : true,
@@ -74,6 +89,7 @@ bo.absdas.gr1_load = function(){
               lineNumbers:true
           }, 
           multiSearch : false,
+          lineNumberWidth:40,
           columns: [
               { field: 'kode_kantor', caption: 'Kode Kantor', size: '100px', sortable: false,style:'text-align:center'},
               { field: 'kode_kry', caption: 'Kode Kry', size: '100px', sortable: false,style:'text-align:center'},
@@ -81,7 +97,7 @@ bo.absdas.gr1_load = function(){
               { field: 'tgl_absen', caption: 'Tgl', size: '100px', sortable: false,style:'text-align:center'},
               { field: 'jam', caption: 'Jam', size: '80px', sortable: false,style:'text-align:center'},
               { field: 'abs_status', caption: 'Status Absensi', size: '180px', sortable: true, resizable: true,editable: { type: 'list', showAll: true, items: people, filter: true }},  
-              { field: 'keterangan', caption: 'Keterangan', size: '200px', sortable: false},
+              { field: 'keterangan', caption: 'Keterangan', size: '400px', sortable: false},
               { field: 'created_at', caption: 'Waktu data masuk', size: '160px', sortable: false,style:'text-align:center'}
               
           ]
@@ -215,6 +231,10 @@ bo.absdas.gr1_reloadd	= function(){
   }
 
   bo.absdas.initFunc = function(){
+        this.obj.find(' #tgl_awal, #tgl_akhir').on('change',function(){
+          bo.absdas.gr1_reloadd() ;  
+    });
+
       this.obj.find('#bform').submit(function(){
           swal.fire({
               title: 'Apakah data sudah benar?',
@@ -253,7 +273,7 @@ bo.absdas.gr1_reloadd	= function(){
 
           w2ui[bo.absdas.id + '_gr1'].getColumn('abs_status').editable.items = people;
         }  
-    }) ;
+    }) ;   
     
   }
 

@@ -77,13 +77,13 @@ class Gjkfg extends Bismillah_Controller{
                       $data1[$n]['dkp']         = $value1['dk'] ; 
                       $data1[$n]['potongan']    = $value1['potongan'] ;
                       $data1[$n]['perhitunganp']= strtoupper($value1['perhitunganp']) ; 
-                      $data1[$n]['nominalp']    = $value1['nominalp'] ; ;
+                      $data1[$n]['nominalp']    = $value1['nominalp'] ; 
                       $n++ ;                      
                     }
                   } 
                 }
                 //print_r($data1);
-                $re['records'] = $data1 ;
+                $re['records'] = $data1 ; 
             }
         }
 
@@ -114,16 +114,20 @@ class Gjkfg extends Bismillah_Controller{
             $where    = array("kode_kantor"=>$kode_kantor,"golongan"=>$golongan,"komponen"=>$komponen) ; 
             $n1       = $this->Bdb->getOne('nominal', 'gj_komponen_nominal',$where) ;   
             $nominal  = $value['w2ui']['changes']['nominal'] ?? $n1 ;           
-            $va2 = array("kode_kantor"=>$kode_kantor,"golongan"=>$golongan,"komponen"=>$komponen,"nominal"=>$nominal,"username"=>$username) ;    
-            $this->Bdb->upsert('gj_komponen_nominal', $va2, $where) ;     
-        
+            if(isset($value['w2ui']['changes'])){
+              $va2 = array("kode_kantor"=>$kode_kantor,"golongan"=>$golongan,"komponen"=>$komponen,"nominal"=>$nominal,"username"=>$username) ;    
+              $this->Bdb->upsert('gj_komponen_nominal', $va2, $where) ;     
+            }
+            
             if($value['dkp'] == "K"){
               $komponen = $value['kodep']  ;      
               $where    = array("kode_kantor"=>$kode_kantor,"golongan"=>$golongan,"komponen"=>$komponen) ; 
               $n2       = $this->Bdb->getOne('nominal', 'gj_komponen_nominal',$where) ;   
               $nominalp = $value['w2ui']['changes']['nominalp'] ?? $n2 ;            
-              $va3 = array("kode_kantor"=>$kode_kantor,"golongan"=>$golongan,"komponen"=>$komponen,"nominal"=>$nominalp,"username"=>$username) ;    
-              $this->Bdb->upsert('gj_komponen_nominal', $va3, $where) ;      
+              if(isset($value['w2ui']['changes'])){
+                $va3 = array("kode_kantor"=>$kode_kantor,"golongan"=>$golongan,"komponen"=>$komponen,"nominal"=>$nominalp,"username"=>$username) ;    
+                $this->Bdb->upsert('gj_komponen_nominal', $va3, $where) ;      
+              }
             }
         } 
 

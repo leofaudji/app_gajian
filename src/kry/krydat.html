@@ -190,11 +190,12 @@ bo.krydat.gr1_load = function(){
               toolbarColumns : false,
               lineNumbers:true
           }, 
-          multiSearch : false,
+          lineNumberWidth: 40,
+          multiSearch : false, 
           columns: [
-              { field: 'cmd', caption: ' ', size: '130px', sortable: false},
-              { field: 'kode', caption: 'Kode', size: '100px', sortable: false},
-              { field: 'nama', caption: 'Nama', size: '200px', sortable: false},
+              { field: 'cmd', caption: ' ', size: '130px', sortable: false,frozen:true},
+              { field: 'kode', caption: 'Kode', size: '100px', sortable: false,frozen:true},
+              { field: 'nama', caption: 'Nama', size: '200px', sortable: false,frozen:true},
               { field: 'alamat_tinggal', caption: 'Alamat', size: '300px', sortable: false},
               { field: 'telepon', caption: 'Telepon', size: '120px', sortable: false},
               { field: 'ttl', caption: 'Tempat, Tgl Lahir', size: '160px', sortable: false},
