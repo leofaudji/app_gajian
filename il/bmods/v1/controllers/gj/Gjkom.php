@@ -59,7 +59,7 @@ class Gjkom extends Bismillah_Controller{
  
         $this->set_response($re, Bismillah_Controller::HTTP_OK);
     }
-
+ 
     public function index_get($kode){
         // koreksi
         $r = $this->Bdb->getOne('*', 'gj_komponen', array('kode'=>$kode));

@@ -47,21 +47,21 @@
                                     <span class="form-check-label">Potongan</span>
                                 </label>
                             </div>
-                          </div>
+                          </div> 
                           
                           <div class="col-md-2">
                             <label class="form-label">Perhitungan:</label>
                             <div class="radio-group"> 
                                 <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="perhitungan" checked value="bulanan">
+                                    <input class="form-check-input" type="radio" id="perhitungan" name="perhitungan" checked value="bulanan">
                                     <span class="form-check-label">Bulanan</span>
                                 </label>
                                 <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="perhitungan" value="harian">
+                                    <input class="form-check-input" type="radio" id="perhitungan" name="perhitungan" value="harian">
                                     <span class="form-check-label">Harian</span>
                                 </label>
                                 <label class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="perhitungan" value="jam">
+                                  <input class="form-check-input" type="radio" id="perhitungan" name="perhitungan" value="jam">
                                   <span class="form-check-label">Jam</span>
                               </label>
                           </div>
@@ -150,9 +150,9 @@ bo.gjkom.gr1_reloadd	= function(){
                   bo.gjkom.kode = r.kode ;
                   bo.gjkom.obj.find("#kode").val(r.kode);
                   bo.gjkom.obj.find("#keterangan").val(r.keterangan);
-                  bo.gjkom.obj.find("#awal").val(r.awal);
-                  bo.gjkom.obj.find("#akhir").val(r.akhir);
-
+                  bo.gjkom.obj.find('input[name="dk"][value="'+r.dk+'"]').prop('checked', true);
+                  bo.gjkom.obj.find('input[name="perhitungan"][value="'+r.perhitungan+'"]').prop('checked', true);
+                  
                   bo.gjkom.obj.find('.nav-tabs a[href="#tab-2"]').tab('show');
               }
           }  

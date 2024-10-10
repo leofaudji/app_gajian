@@ -23,13 +23,15 @@ class Gjpay extends Bismillah_Controller{
         $bs = isset($va['bsearch']) ? $va['bsearch'] : array();
         $s = isset($va['search']) ? $va['search'][0]['value'] : ''; 
 
-        $kode_kantor    = $va['kode_kantor'] ?? "" ;   
-        $golongan       = $va['golongan_f']  ?? "" ;
+        $kode_kantor    = $va['kode_kantor'] ?? "" ;       
         $periode        = $va['periode']  ?? "" ;
+        $tgl            = date_2s($va['tgl'])  ?? date("Y-m-d") ;
+
+        //print($tgl) ; 
 
         $this->gr1_where($bs, $s); 
         $this->db->where('kode_kantor', $kode_kantor); 
-        $this->db->where('golongan', $golongan);
+        $this->db->where('tgl_keluar >=', $tgl);
 
         $db = $this->Bdb->db->select("count(id) jml")
                             ->from("mst_karyawan")
@@ -40,8 +42,8 @@ class Gjpay extends Bismillah_Controller{
             if($r['jml'] > 0){
                 $re['total'] = $r['jml'];
                 $this->gr1_where($bs, $s);
+                $this->db->where('tgl_keluar >=', $tgl);
                 $this->db->where('kode_kantor', $kode_kantor); 
-                $this->db->where('golongan', $golongan);
                 $db = $this->Bdb->db->select("*")
                                     ->from("mst_karyawan")
                                     ->limit($va['limit'], $va['offset'])
@@ -56,8 +58,10 @@ class Gjpay extends Bismillah_Controller{
                     //append
                     $re['records'][]    = $r ;  
                 }
+
             }
         }
+
 
         $this->set_response($re, Bismillah_Controller::HTTP_OK);
     }
@@ -77,9 +81,10 @@ class Gjpay extends Bismillah_Controller{
         $golongan   = $va['golongan'] ?? "" ;
         $periode    = $va['periode'] ?? "" ;
 
+        //print_r($va) ;
         $datagaji = $this->Gj->get_gaji($kode_kantor,$periode,$kode,$golongan) ;  
-
-        //print_r($datagaji) ;
+        
+        //print_r($datagaji) ; 
 
         if(isset($r)){
             $r['jml']   = intval($r['jml']);
@@ -122,8 +127,8 @@ class Gjpay extends Bismillah_Controller{
                       $data1[$n]['dk']          = $value1['dk'] ; 
                       $data1[$n]['tambahan']    = $value1['tambahan'] ; 
                       $data1[$n]['perhitungan'] = ($value1['perhitungan'] == 'harian') ? $datagaji['absensi']['masuk'] : 1 ;
-                      $data1[$n]['nominal']     = number_format($value1['nominal'],0) ;
-                      $data1[$n]['jumlah']      = number_format($value1['nominal'] * $data1[$n]['perhitungan'],0) ;
+                      $data1[$n]['nominal']     = $value1['nominal'] ; 
+                      $data1[$n]['jumlah']      = $value1['nominal'] * $data1[$n]['perhitungan'] ;
                       $data1[$n]['kodep']       = "" ;
                       $data1[$n]['dkp']         = "" ; 
                       $data1[$n]['potongan']    = "" ;
@@ -139,8 +144,8 @@ class Gjpay extends Bismillah_Controller{
                       $data1[$n]['dkp']         = $value1['dk'] ; 
                       $data1[$n]['potongan']    = $value1['potongan'] ;
                       $data1[$n]['perhitunganp'] = ($value1['perhitunganp'] == 'harian') ? $datagaji['absensi']['masuk'] : 1 ; 
-                      $data1[$n]['nominalp']    = number_format($value1['nominalp'],0) ; 
-                      $data1[$n]['jumlahp']     = number_format($value1['nominalp'] * $data1[$n]['perhitunganp'],0) ;
+                      $data1[$n]['nominalp']    = $value1['nominalp'] ; 
+                      $data1[$n]['jumlahp']     = $value1['nominalp'] * $data1[$n]['perhitunganp'] ;
                       $n++ ;                      
                     }
                   } 
@@ -185,11 +190,10 @@ class Gjpay extends Bismillah_Controller{
         $va = $this->post(); 
         
         //print("kode kry : " . $kode . "<br>") ;  
-        //print_r($va['gr2']) ;  
+        //print_r($va) ;  
         $username     = $this->aruser['username'] ; 
 
-        $tgl        = date_2s($va['tgl']) ;
-        $golongan   = $va['golongan'] ;      
+        $tgl        = date_2s($va['tgl']) ; 
         
         foreach($va['gr2'] as $key=>$value){       
             $komponen = $value['kode']  ;   

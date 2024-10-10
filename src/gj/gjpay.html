@@ -49,15 +49,7 @@
                               name="kode_kantor" id="kode_kantor" data-sf="loadkantor"></select>
                           </div>
                         </div>
-    
-                        <div class="col-md-2">
-                          <div class="form-group form-group-default form-group-default-select2 required">
-                              <label class="form-label required">Golongan Gaji</label>
-                              <select class="full-width scons" data-placeholder="Cari Golongan Gaji" required 
-                              name="golongan" id="golongan" data-sf="loadgajigol"></select>
-                          </div>
-                        </div>
-                    
+                        
                         <div class="col-md-2">
                             <label class="form-label required" for="tgl">Tgl Perubahan:</label>
                             <input type="text" id="tgl" name="tgl" class="form-control tgl" required>
@@ -96,9 +88,10 @@ bo.gjpay.gr1_data = null ;
 bo.gjpay.kode_kantor    = "" ;
 bo.gjpay.golongan_f     = "" ; 
 bo.gjpay.periode        = "" ; 
+bo.gjpay.tgl        = "" ; 
  
 bo.gjpay.gr1_loadd = function(){ 
-  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode_kantor:this.obj.find('#kode_kantor').val(),golongan_f:this.obj.find('#golongan').val(),periode:this.obj.find('#periode').val()}; 
+  this.gr1_data = {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode_kantor:this.obj.find('#kode_kantor').val(),periode:this.obj.find('#periode').val(),tgl:this.obj.find('#tgl').val()}; 
 } 
 
 bo.gjpay.gr1_load = function(){
@@ -106,6 +99,7 @@ bo.gjpay.gr1_load = function(){
         name : bo.gjpay.id + '_gr1', 
         limit : 100 , 
         url : burls + bo.gjpay.path + '/gr1',
+        postData : {bsearch: bj.getDataJson(this.obj.find('#bsearch')),kode_kantor:this.obj.find('#kode_kantor').val(),periode:this.obj.find('#periode').val(),tgl:this.obj.find('#tgl').val()},
         show: {
               footer : true,
               toolbar : true,
@@ -171,7 +165,8 @@ bo.gjpay.gr2_load = function(){
   this.obj.find('#gr2').w2grid({  
         name : bo.gjpay.id + '_gr2', 
         limit : 100 , 
-        url : burls + bo.gjpay.path + '/gr2',
+        url : burls + bo.gjpay.path + '/gr2',  
+        postData: {kode:bo.gjpay.kode,golongan:bo.gjpay.golongan,kode_kantor:this.obj.find('#kode_kantor').val(),periode:this.obj.find('#periode').val()}, 
         show: {
               footer : true,
               toolbar : false,
@@ -188,14 +183,27 @@ bo.gjpay.gr2_load = function(){
                 //console.log(extra);
                 return record.nominal || 0 ;
                 }},
-              { field: 'sp', size: '20px'},  
               { field: 'jumlah', caption: 'Jumlah', size: '100px', sortable: false,style:'text-align:right'},
+              { field: 'sp', size: '20px'},  
               { field: 'kodep', caption: 'Kode', size: '50px', sortable: false,style:'text-align:center'},
               { field: 'potongan', caption: 'Potongan', size: '200px', sortable: false},  
               { field: 'perhitunganp', caption: 'Jml', size: '50px', sortable: false,style:'text-align:right'},
               { field: 'nominalp', caption: 'Nominal', size: '80px', sortable: false,style:'text-align:right',editable: { type: 'int', min: 0, max: 5000000}},
               { field: 'jumlahp', caption: 'Jumlah', size: '100px', sortable: false,style:'text-align:right'}
-          ]
+          ],
+          onChange: function (event) {
+            event.onComplete = function () {                                        
+              w2ui[event.target].save();     
+              br.post({ 
+                  path : bo.gjpay.url + "/" + bo.gjpay.kode ,
+                  data : $.extend(true, bj.getDataJson($("#bform")), {'gr2': w2ui[bo.gjpay.id + '_gr2'].records}), 
+                  success: function(d){
+                      bo.gjpay.gr1_reloadd() ;  
+                  }
+              });
+            }
+            
+          }
 
     });     
 } 
@@ -228,11 +236,27 @@ bo.gjpay.gr2_reloadd	= function(){
   bo.gjpay.init = function(){
     this.kode = 0;
  
+    w2ui['gjpay_gr1'].clear();  
+    w2ui['gjpay_gr1'].add([
+                            { recid:'ftr1', 
+                            kode:'11', 
+                            nama:'Total',
+                            total_gaji: 0,
+                            masakerja: 0,
+                            golongan: 0,
+                            jabatan: 0,
+                            rekening: 0,
+                            w2ui: { summary: true }
+                            }
+                        ]) ;
+    
+
     this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
 
     if(bo.gjpay.periode == ""){
         this.obj.find('#periode').select2('open') ;
     }
+
   }
 
   bo.gjpay.edit = function(kode){
@@ -314,7 +338,13 @@ bo.gjpay.gr2_reloadd	= function(){
   }
 
   bo.gjpay.initCb = function(){ 
-      this.obj.find('#kode_kantor,#golongan,#periode').on('select2:selecting', function(e){ 
+      this.obj.find('#kode_kantor,#periode').on('select2:selecting', function(e){ 
+          setTimeout(function(){
+              bo.gjpay.gr1_reloadd(); 
+          });
+      });
+
+      this.obj.find('#tgl').on('change', function(e){  
           setTimeout(function(){
               bo.gjpay.gr1_reloadd(); 
           });
@@ -348,7 +378,7 @@ bo.gjpay.gr2_reloadd	= function(){
               if (result.isConfirmed) {
                   br.post({
                       path : bo.gjpay.url + "/" + bo.gjpay.kode ,
-                      data : $.extend(true, bj.getDataJson(this), {'gr2': w2ui[bo.gjpay.id + '_gr2'].records}),
+                      data : $.extend(true, bj.getDataJson(this), {'gr2': w2ui[bo.gjpay.id + '_gr2'].records}), 
                       success: function(d){
                           bo.gjpay.init();
                           bo.gjpay.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
@@ -358,7 +388,6 @@ bo.gjpay.gr2_reloadd	= function(){
                               icon: 'success'
                           }); 
                           bo.gjpay.gr1_reloadd() ;
-                          bo.gjpay.gr2_reloadd() ;
                       }
                   });
               }

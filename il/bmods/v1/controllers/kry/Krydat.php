@@ -94,8 +94,9 @@ class Krydat extends Bismillah_Controller{
         $va = $this->post();
         $va['kode'] = $this->Bdb->getIncrement("karyawan-" . $va['kode_kantor'], true, 10);
         $va['username'] = $this->aruser['username'];
+        $va['tgl_keluar'] = "9999-12-31";
         //print_r($va) ; 
-        $this->Bdb->upsert('mst_karyawan', $va, array("kode"=>$kode)) ; 
+        $this->Bdb->upsert('mst_karyawan', $va, array("kode"=>$kode)) ;   
 
         // response
         $this->set_response(['saved' => true], Bismillah_Controller::HTTP_OK);
