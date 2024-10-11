@@ -72,7 +72,7 @@
                     
                     <div class="row" style="margin-top:10px;">
                         
-                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
+                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Posting Gaji</button>
                         
                     </div>
 
@@ -195,10 +195,10 @@ bo.gjpay.gr2_load = function(){
             event.onComplete = function () {                                        
               w2ui[event.target].save();     
               br.post({ 
-                  path : bo.gjpay.url + "/" + bo.gjpay.kode ,
+                  path : bo.gjpay.url + '/egj/' + bo.gjpay.kode,  
                   data : $.extend(true, bj.getDataJson($("#bform")), {'gr2': w2ui[bo.gjpay.id + '_gr2'].records}), 
                   success: function(d){
-                      bo.gjpay.gr1_reloadd() ;  
+                      bo.gjpay.gr1_reloadd() ;     
                   }
               });
             }
@@ -234,22 +234,7 @@ bo.gjpay.gr2_reloadd	= function(){
 }
 
   bo.gjpay.init = function(){
-    this.kode = 0;
- 
-    w2ui['gjpay_gr1'].clear();  
-    w2ui['gjpay_gr1'].add([
-                            { recid:'ftr1', 
-                            kode:'11', 
-                            nama:'Total',
-                            total_gaji: 0,
-                            masakerja: 0,
-                            golongan: 0,
-                            jabatan: 0,
-                            rekening: 0,
-                            w2ui: { summary: true }
-                            }
-                        ]) ;
-    
+    this.kode = 0 ; 
 
     this.obj.find('.nav-tabs a[data-target="#tab-1"]').tab('show');
 
@@ -367,7 +352,7 @@ bo.gjpay.gr2_reloadd	= function(){
   }
 
   bo.gjpay.initFunc = function(){
-      this.obj.find('#bform').submit(function(){
+      this.obj.find('#bform').submit(function(){  
           swal.fire({
               title: 'Apakah data sudah benar?',
               icon: 'warning',
@@ -378,7 +363,7 @@ bo.gjpay.gr2_reloadd	= function(){
               if (result.isConfirmed) {
                   br.post({
                       path : bo.gjpay.url + "/" + bo.gjpay.kode ,
-                      data : $.extend(true, bj.getDataJson(this), {'gr2': w2ui[bo.gjpay.id + '_gr2'].records}), 
+                      data : $.extend(true, bj.getDataJson(this), {'gr1': w2ui[bo.gjpay.id + '_gr1'].records}), 
                       success: function(d){
                           bo.gjpay.init();
                           bo.gjpay.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');

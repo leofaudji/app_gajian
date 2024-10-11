@@ -23,9 +23,9 @@ class Gj extends Bismillah_Model{
 
 
     // Ambil data absensi karyawan
-    $this->db->where('kode_kry', $kode_kry);   
-    $this->db->where('tgl >=', $va['periode']['awal'] ?? date("Y-m-d")) ; 
-    $this->db->where('tgl <=', $va['periode']['akhir'] ?? date("Y-m-d")) ;           
+    $this->db->where('a.kode_kry', $kode_kry);   
+    $this->db->where('a.tgl >=', $va['periode']['awal'] ?? date("Y-m-d")) ; 
+    $this->db->where('a.tgl <=', $va['periode']['akhir'] ?? date("Y-m-d")) ;           
     $db1 = $this->db->select("a.tgl,a.jam,m.status")    
                 ->from("abs_tmp a")
                 ->join("mst_abs_status m","m.kode = a.abs_status","left")
@@ -41,7 +41,8 @@ class Gj extends Bismillah_Model{
     }  
 
     // Nominal Gaji ambil dari per karyawan
-    $this->db->where('kode_kry', $kode_kry);
+    $this->db->where('a.periode', $periode);   
+    $this->db->where('a.kode_kry', $kode_kry);
     $db1 = $this->db->select("a.komponen,a.nominal,m.perhitungan,m.dk")   
                 ->from("gj_komponen_nominal_kry a")
                 ->join("gj_komponen m","m.kode = a.komponen","left")
@@ -62,8 +63,8 @@ class Gj extends Bismillah_Model{
 
     // Nominal Gaji default ambil dari golongan Gaji
     if($va['gaji']['total_gaji'] == 0){
-      $this->db->where('kode_kantor', $kode_kantor);
-      $this->db->where('golongan', $golongan); 
+      $this->db->where('a.kode_kantor', $kode_kantor);
+      $this->db->where('a.golongan', $golongan); 
       $db = $this->db->select("a.komponen,a.nominal,m.perhitungan,m.dk") 
                 ->from("gj_komponen_nominal a")
                 ->join("gj_komponen m","m.kode = a.komponen","left")
@@ -78,7 +79,7 @@ class Gj extends Bismillah_Model{
         $va['gaji'][$r['komponen']]  = $r['nominal'] ;  
         $va['gaji']['tambahan']      = $tambahan ;     
         $va['gaji']['potongan']      = $potongan ;     
-        $va['gaji']['total_gaji']   += $tambahan - $potongan ;      
+        $va['gaji']['total_gaji']    = $tambahan - $potongan ;      
       }  
     }
 

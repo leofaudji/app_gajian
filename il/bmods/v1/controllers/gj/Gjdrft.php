@@ -30,11 +30,13 @@ class Gjdrft extends Bismillah_Controller{
         //print($tgl) ; 
 
         $this->gr1_where($bs, $s); 
-        $this->db->where('kode_kantor', $kode_kantor); 
-        $this->db->where('tgl_keluar >=', $tgl);
+        $this->db->where('a.kode_kantor', $kode_kantor); 
+        $this->db->where('a.periode', $periode); 
+        //$this->db->where('tgl_keluar >=', $tgl);
 
-        $db = $this->Bdb->db->select("count(id) jml")
-                            ->from("mst_karyawan")
+        $db = $this->Bdb->db->select("count(a.id) jml")
+                            ->from("gj_payroll a") 
+                            ->join("mst_karyawan m","m.kode = a.kode_kry","left")  
                             ->get();
         $r  = $db->row_array();
         if(isset($r)){
@@ -42,27 +44,29 @@ class Gjdrft extends Bismillah_Controller{
             if($r['jml'] > 0){
                 $re['total'] = $r['jml'];
                 $this->gr1_where($bs, $s);
-                $this->db->where('tgl_keluar >=', $tgl);
-                $this->db->where('kode_kantor', $kode_kantor); 
-                $db = $this->Bdb->db->select("*")
-                                    ->from("mst_karyawan")
+                $this->db->where('a.kode_kantor', $kode_kantor); 
+                $this->db->where('a.periode', $periode);  
+                //$this->db->where('tgl_keluar >=', $tgl);
+                $db = $this->Bdb->db->select("a.id,a.kode_kry,m.nama,m.tgl_masuk,a.total,a.rekening,m.golongan,mg.keterangan namagolongan,md.keterangan namadivisi,m.jabatan,mj.keterangan namajabatan")
+                                    ->from("gj_payroll a")
+                                    ->join("mst_karyawan m","m.kode = a.kode_kry","left")  
+                                    ->join("gj_golongan mg","mg.kode = m.golongan","left")  
+                                    ->join("mst_jabatan mj","mj.kode = m.jabatan","left")  
+                                    ->join("mst_divisi md","md.kode = m.divisi","left")  
                                     ->limit($va['limit'], $va['offset'])
-                                    ->order_by('id ASC')
+                                    ->order_by('m.kode ASC') 
                                     ->get();  
                 foreach($db->result_array() as $r){
                     $r['recid'] = $r['id'] ;
- 
-                    $datagaji           = $this->Gj->get_gaji($r['kode_kantor'],$periode,$r['kode'],$r['golongan']) ;    
-                    $r['total_gaji']    = number_format($datagaji['gaji']['total_gaji'],0) ;                    
-                    $r['masakerja']     = hitung_umur($r['tgl_masuk']) ;
-
-                    $detail = "" ;
-
-                    foreach($datagaji['gaji'] as $key=>$value){
-                      $detail .= $value . " <br>" ;  
-                    }
-
-                    $r['detail']        = $detail ;
+                    $r['kode']  = $r['kode_kry'] ;
+                    $r['nama']  = $r['nama'] ;
+                    $r['golongan']  = $r['namagolongan'] ;
+                    $r['divisi']    = $r['namadivisi'] ; 
+                    $r['jabatan']   = $r['namajabatan'] ;
+                    $r['total_gaji'] = number_format($r['total'],0) ;                     
+                    $r['masakerja']  = hitung_umur($r['tgl_masuk'] ?? date("Y-m-d")) ;
+                    $r['rekening']   = $r['rekening'] ;
+                    
                     //append
                     $re['records'][]    = $r ;  
                 }

@@ -185,33 +185,60 @@ class Gjpay extends Bismillah_Controller{
         $this->set_response(['deleted' => $lresult], Bismillah_Controller::HTTP_OK);    
     }
 
-    public function index_post($kode){
+    public function egj_post($kode){  
         // saving
         $va = $this->post(); 
         
         //print("kode kry : " . $kode . "<br>") ;  
         //print_r($va) ;  
-        $username     = $this->aruser['username'] ; 
+        $periode    = $va['periode'] ;
+        $username   = $this->aruser['username'] ; 
 
         $tgl        = date_2s($va['tgl']) ; 
         
         foreach($va['gr2'] as $key=>$value){       
             $komponen = $value['kode']  ;   
-            $where    = array("kode_kry"=>$kode,"komponen"=>$komponen) ; 
+            $where    = array("periode"=>$periode,"kode_kry"=>$kode,"komponen"=>$komponen) ; 
             $nominal  = $value['w2ui']['changes']['nominal'] ?? $value['nominal'] ;           
             $jml  = $value['w2ui']['changes']['perhitungan'] ?? $value['perhitungan'] ;           
                         
-            $va2 = array("tgl"=>$tgl,"kode_kry"=>$kode,"komponen"=>$komponen,"nominal"=>$nominal,"perhitungan"=>$jml,"username"=>$username) ;    
+            $va2 = array("tgl"=>$tgl,"periode"=>$periode,"kode_kry"=>$kode,"komponen"=>$komponen,"nominal"=>$nominal,"perhitungan"=>$jml,"username"=>$username) ;    
             $this->Bdb->upsert('gj_komponen_nominal_kry', $va2, $where) ;     
             
             if($value['dkp'] == "K"){
               $komponen = $value['kodep']  ;      
-              $where    = array("kode_kry"=>$kode,"komponen"=>$komponen) ; 
+              $where    = array("periode"=>$periode,"kode_kry"=>$kode,"komponen"=>$komponen) ; 
               $nominalp = $value['w2ui']['changes']['nominalp'] ?? $value['nominalp']  ;             
               $jmlp     = $value['w2ui']['changes']['perhitunganp'] ?? $value['perhitunganp'] ;           
-              $va3 = array("tgl"=>$tgl,"kode_kry"=>$kode,"komponen"=>$komponen,"nominal"=>$nominalp,"perhitungan"=>$jmlp,"username"=>$username) ;    
+              $va3 = array("tgl"=>$tgl,"periode"=>$periode,"kode_kry"=>$kode,"komponen"=>$komponen,"nominal"=>$nominalp,"perhitungan"=>$jmlp,"username"=>$username) ;    
               $this->Bdb->upsert('gj_komponen_nominal_kry', $va3, $where) ;      
             }
+        }
+
+        // response
+        $this->set_response(['saved' => true], Bismillah_Controller::HTTP_OK); 
+    }
+
+    public function index_post($kode){   
+        // saving
+        $va = $this->post(); 
+        
+        //print("kode kry : " . $kode . "<br>") ;  
+        //print_r($va['gr1']) ;  
+        $kode_kantor= $va['kode_kantor'] ;
+        $periode    = $va['periode'] ;
+        $username   = $this->aruser['username'] ;                
+
+
+        $tgl        = date_2s($va['tgl']) ; 
+        
+        foreach($va['gr1'] as $key=>$value){       
+            $kode   = $value['kode'] ;
+            $where  = array("kode_kantor"=>$kode_kantor,"periode"=>$periode,"kode_kry"=>$kode) ; 
+                        
+            $va2 = array("periode"=>$periode,"kode_kry"=>$kode,"tgl"=>$tgl,"rekening"=>$value['rekening'],
+                         "total"=>parse_number($value['total_gaji'],2),"kode_kantor"=>$kode_kantor,"username"=>$username) ;       
+            $this->Bdb->upsert('gj_payroll', $va2, $where) ;                   
         }
 
         // response
