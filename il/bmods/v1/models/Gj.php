@@ -54,7 +54,7 @@ class Gj extends Bismillah_Model{
       if(strtoupper($r['perhitungan']) == 'HARIAN') $jumlah = $r['nominal'] * $va['absensi']['masuk'] ;    
       if($r['dk'] == 'D') $tambahan += $jumlah ; 
       if($r['dk'] == 'K') $potongan += $jumlah ; 
-      $va['gaji'][$r['komponen']]  = $r['nominal'] ;  
+      $va['gaji'][$r['komponen']]  = $r['nominal'] ?? 0 ;  
       $va['gaji']['tambahan']      = $tambahan ;     
       $va['gaji']['potongan']      = $potongan ;     
       $va['gaji']['total_gaji']    = $tambahan - $potongan ;     

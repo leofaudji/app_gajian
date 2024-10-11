@@ -119,7 +119,7 @@ class D extends Bismillah_Controller{
         $re = array('nom'=>0,'fkt'=>0);
         if(empty($periode))$periode = 'h';
         
-        $tgl = date("Y-m-d");
+        $tgl = date("Y-m-d"); 
         $thn = 2022;//date("Y");
         $bln = 4;//date("m");
 
