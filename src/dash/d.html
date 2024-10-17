@@ -6,23 +6,16 @@
             <div class="d-flex align-items-center">
               <div class="subheader" id="pj_ket"></div>
               <div class="ms-auto lh-1">
-                <!-- Bulan Ini -->
-                <div class="dropdown">                
-                  <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="javascript:bo.d.pj('h');">Hari Ini</a>
-                    <a class="dropdown-item" href="javascript:bo.d.pj('b');">Bulan Ini</a>
-                    <a class="dropdown-item" href="javascript:bo.d.pj('t');">Tahun Ini</a>
-                  </div>
-                </div>
+                
+                
               </div>
             </div>
             <div class="h1 mb-3" id="pj_fkt">0</div>
             <div class="d-flex mb-2">
-              <div>Jumlah Kantor</div>
+              <div>Periode Aktif</div>
               <div class="ms-auto">
                 <span class="text-green d-inline-flex align-items-center lh-1 h1" id="pj_nom">
-                  Rp. 0
+                  Rp. 0 
                   </span>
               </div>
             </div>
@@ -78,7 +71,7 @@
           </div>
           <div class="h1 mb-3" id="pj_r_fkt">0</div>
           <div class="d-flex mb-2">
-            <div>Jumlah Karyawan Aktif</div>
+            <div>Jumlah Karyawan</div>
             <div class="ms-auto">
               <span class="text-muted d-inline-flex align-items-center lh-1 h1" id="pj_r_nom">
                 Rp. 0
@@ -117,35 +110,6 @@
       </div>
     </div>
     
-    <div class="col-sm-6 col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              <div class="subheader" id="pp_ket"></div>
-              <div class="ms-auto lh-1">
-                <div class="dropdown">
-                  <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilih Periode</a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="javascript:bo.d.pp('h');">Hari Ini</a>
-                    <a class="dropdown-item" href="javascript:bo.d.pp('b');">Bulan Ini</a>
-                    <a class="dropdown-item" href="javascript:bo.d.pp('t');">Tahun Ini</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="h1 mb-3" id="pp_fkt">0</div>
-            <div class="d-flex mb-2"> 
-              <div>Daftar Periode</div>
-              <div class="ms-auto">
-                <span class="text-blue d-inline-flex align-items-center lh-1 h1" id="pp_nom">
-                  Rp. 0
-                  </span>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-
     <div class="col-sm-6 col-lg-6">
         <div class="card">
           <div class="card-body">
@@ -249,7 +213,7 @@
     </div>
 </div>
 
-
+ 
 
 <!-- <script src="./assets/dist/libs/apexcharts/dist/apexcharts.min.js"></script> -->
 <script>
@@ -259,12 +223,12 @@
         bo.d.obj.find('#pj_nom').html('');
         bo.d.obj.find('#pj_ket').html('Loading...');
         br.get({
-            path: bo.d.path + '/pj/'+periode, 
+            path: bo.d.path + '/periode/'+periode, 
             success: function(r){
                 // console.log(r);
-                bo.d.obj.find('#pj_fkt').html(r.fkt.number_format());
-                bo.d.obj.find('#pj_nom').html("Rp. "+r.nom.number_format());
-                bo.d.obj.find('#pj_ket').html("Penjualan "+r.periode);
+                bo.d.obj.find('#pj_fkt').html(r.kode); 
+                bo.d.obj.find('#pj_nom').html(r.keterangan);
+                bo.d.obj.find('#pj_ket').html("kode");
                 
             }
         });
@@ -274,14 +238,14 @@
         bo.d.pb.period = periode;
         bo.d.obj.find('#pb_fkt').html('<div class="progress"><div class="progress-bar progress-bar-indeterminate bg-dark-lt"></div></div>');
         bo.d.obj.find('#pb_nom').html('');
-        bo.d.obj.find('#pb_ket').html('Loading...');
+        bo.d.obj.find('#pb_ket').html('Loading...'); 
         br.get({
-            path: bo.d.path + '/pb/'+periode, 
+            path: bo.d.path + '/abs/'+periode, 
             success: function(r){
                 console.log(r);
-                bo.d.obj.find('#pb_fkt').html(r.fkt.number_format());
+                bo.d.obj.find('#pb_fkt').html(r.fkt.number_format()); 
                 bo.d.obj.find('#pb_nom').html("Rp. "+r.nom.number_format());
-                bo.d.obj.find('#pb_ket').html("Pembelian "+r.periode);
+                bo.d.obj.find('#pb_ket').html("Absensi "+r.periode);
                 
             }
         });
@@ -293,12 +257,12 @@
         bo.d.obj.find('#pj_r_nom').html('');
         bo.d.obj.find('#pj_r_ket').html('Loading...');
         br.get({
-            path: bo.d.path + '/pj_r/'+periode, 
+            path: bo.d.path + '/kry/'+periode, 
             success: function(r){
                 console.log(r);
                 bo.d.obj.find('#pj_r_fkt').html(r.fkt.number_format());
                 bo.d.obj.find('#pj_r_nom').html("Rp. "+r.nom.number_format());
-                bo.d.obj.find('#pj_r_ket').html("Retur Penjualan "+r.periode);
+                bo.d.obj.find('#pj_r_ket').html("Jumlah Karyawan "+r.periode);
                 
             }
         });
