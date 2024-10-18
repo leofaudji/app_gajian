@@ -220,6 +220,9 @@ const bj = {
                 $("#id-modal-rpt").on("shown.bs.modal", function(){
                     $(this).find("iframe").attr("src", outDoc);
                 }) ;
+                $("#id-modal-rpt").on("hidden.bs.modal", function() {
+                    $(this).find("iframe").removeAttr("src");
+                });
             });
         }else{
             pdfMake.createPdf(par).print();

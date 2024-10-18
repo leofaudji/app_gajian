@@ -35,6 +35,14 @@
                             <label class="form-label required" for="tgl">Tgl Posting:</label>
                             <input type="text" id="tgl" name="tgl" class="form-control tgl" required>
                         </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label" for="button">&nbsp;</label>  
+                            <div class="btn-group w-100">
+                                <button class="btn btn-danger w-100" type="button" id="r_pdf"><i class="fa fa-file-pdf-o"></i><span id="r_text_1">PDF</span></button>
+                                <button class="btn btn-success w-100" type="button" id="r_xls"><i class="fa fa-file-excel-o"></i><span id="r_text_0">XLS</span></button>
+                            </div>
+                        </div>
                         
 
                     </div>
@@ -45,13 +53,8 @@
                             <div id="gr1" style="min-height: 500px; max-height: 500px;margin-top:2px;"></div> 
                         </div>
 
-                    </div>
-                    
-                    <div class="row" style="margin-top:10px;">
-                        
-                        <button class="btn btn-primary btn-block fs-18 w-100" type="submit"><i class="fa fa-save"></i>&nbsp;Simpan</button>
-                        
-                    </div>
+                    </div> 
+
 
                 </form>
 
@@ -62,7 +65,7 @@
 </div> 
 <script>
 bo.gjdrft.gr1_data = null ; 
-bo.gjdrft.kode_kantor    = "" ;
+bo.gjdrft.kode_kantor    = "" ; 
 bo.gjdrft.golongan_f     = "" ; 
 bo.gjdrft.periode        = "" ; 
 bo.gjdrft.tgl        = "" ; 
@@ -86,6 +89,7 @@ bo.gjdrft.gr1_load = function(){
           multiSearch : false,
           lineNumberWidth: 40,
           columns: [
+              { field: 'detil', caption: '', size: '60px', sortable: false, style:"text-align:center;",frozen:true}, 
               { field: 'kode', caption: 'Kode', size: '100px', sortable: false,style:'text-align:center',frozen:true},
               { field: 'nama', caption: 'Nama', size: '260px', sortable: false,frozen:true},
               { field: 'golongan', caption: 'Golongan', size: '160px', sortable: false},
@@ -241,34 +245,70 @@ bo.gjdrft.gr1_reloadd	= function(){
   }
 
   bo.gjdrft.initFunc = function(){
-      this.obj.find('#bform').submit(function(){
-          swal.fire({
-              title: 'Apakah data sudah benar?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Ya',
-              cancelButtonText: 'Tidak'
-          }).then((result)=>{
-              if (result.isConfirmed) {
-                  br.post({
-                      path : bo.gjdrft.url + "/" + bo.gjdrft.kode ,
-                      data : $.extend(true, bj.getDataJson(this), {'gr1': w2ui[bo.gjdrft.id + '_gr1'].records}), 
-                      success: function(d){
-                          bo.gjdrft.init();
-                          bo.gjdrft.obj.find('.nav-tabs a[href="#tab-1"]').tab('show');
+    this.obj.find('#r_pdf').on('click', function(){
+        bo.gjdrft.cetak(1) ;
+    });
 
-                          swal.fire({
-                              title: 'Data berhasil disimpan.',
-                              icon: 'success'
-                          }); 
-                          bo.gjdrft.gr1_reloadd() ;
-                      }
-                  });
-              }
-          });
-          event.preventDefault();
-      }) ;
+    this.obj.find('#r_xls').on('click', function(){
+        bo.gjdrft.cetak(2) ; 
+    });
   }
+
+  bo.gjdrft.initpdf    = function(){bo.gjdrft.pdf = {content:[]}}
+
+  bo.gjdrft.cetak       = function(jenis){
+        bo.gjdrft.obj.find("button").prop('disabled', true);
+        br.get({
+            path: bo.gjdrft.path + "/cetak/",
+            data: {
+                    "bsearch": bj.getDataJson(bo.gjdrft.obj.find('#bsearch')),"periode": bo.gjdrft.obj.find('#periode').val(), "kode_kantor":bo.gjdrft.obj.find('#kode_kantor').val()  
+                },
+            success: function(d){
+                if(!$.isEmptyObject(d)){
+                    bo.gjdrft.obj.find("button").prop('disabled', false);
+
+                    // cetak
+                    if(jenis == "1"){
+                        bo.gjdrft.initpdf();
+                        $.merge(bo.gjdrft.pdf.content, d.content);
+                        bj.pdf_open('DAFTAR PAYROLL', bo.gjdrft.pdf);               
+                    }else{
+                        bj.excel_open(d.xlsx['contentXlsx'], d.xlsx['sheets'], 'DAFTAR PAYROLL '+bo.gjdrft.obj.find('#periode').val()+'.xlsx') ;
+                    }
+                }else{
+                    bo.gjdrft.obj.find("button").prop('disabled', false);
+                    swal.fire("Data Tidak Ditemukan");
+                }
+            }
+        });
+    }
+
+    bo.gjdrft.cetakdetil       = function(kode_kry,jenis){
+        bo.gjdrft.obj.find("button").prop('disabled', true); 
+        br.get({
+            path: bo.gjdrft.path + "/cetakdetil/",  
+            data: {
+                    "bsearch": bj.getDataJson(bo.gjdrft.obj.find('#bsearch')),"periode": bo.gjdrft.obj.find('#periode').val(), "kode_kantor":bo.gjdrft.obj.find('#kode_kantor').val(), "kode_kry":kode_kry  
+                },
+            success: function(d){
+                if(!$.isEmptyObject(d)){
+                    bo.gjdrft.obj.find("button").prop('disabled', false);
+
+                    // cetak
+                    if(jenis == "1"){
+                        bo.gjdrft.initpdf();
+                        $.merge(bo.gjdrft.pdf.content, d.content);
+                        bj.pdf_open('SLIP GAJI KARYAWAN', bo.gjdrft.pdf);               
+                    }else{
+                        bj.excel_open(d.xlsx['contentXlsx'], d.xlsx['sheets'], 'SLIP GAJI KARYAWAN '+bo.gjdrft.obj.find('#periode').val()+'.xlsx') ;
+                    }
+                }else{
+                    bo.gjdrft.obj.find("button").prop('disabled', false);
+                    swal.fire("Data Tidak Ditemukan");
+                }
+            }
+        });
+    }
 
   $(function(){
       bo.gjdrft.initComp() ;
