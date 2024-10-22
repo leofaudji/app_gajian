@@ -257,6 +257,7 @@ bo.gjdrft.gr1_reloadd	= function(){
   bo.gjdrft.initpdf    = function(){bo.gjdrft.pdf = {content:[]}}
 
   bo.gjdrft.cetak       = function(jenis){
+    if(bo.gjdrft.obj.find('#periode').val() !== null && bo.gjdrft.obj.find('#kode_kantor').val() !== null){
         bo.gjdrft.obj.find("button").prop('disabled', true);
         br.get({
             path: bo.gjdrft.path + "/cetak/",
@@ -281,33 +282,46 @@ bo.gjdrft.gr1_reloadd	= function(){
                 }
             }
         });
+    }else{
+        swal.fire({
+            title: 'Data tidak valid.',
+            icon: 'info'
+        });  
     }
+  }
 
     bo.gjdrft.cetakdetil       = function(kode_kry,jenis){
-        bo.gjdrft.obj.find("button").prop('disabled', true); 
-        br.get({
-            path: bo.gjdrft.path + "/cetakdetil/",  
-            data: {
-                    "bsearch": bj.getDataJson(bo.gjdrft.obj.find('#bsearch')),"periode": bo.gjdrft.obj.find('#periode').val(), "kode_kantor":bo.gjdrft.obj.find('#kode_kantor').val(), "kode_kry":kode_kry  
-                },
-            success: function(d){
-                if(!$.isEmptyObject(d)){
-                    bo.gjdrft.obj.find("button").prop('disabled', false);
+        if(bo.gjdrft.obj.find('#periode').val() !== null && bo.gjdrft.obj.find('#kode_kantor').val() !== null){
+            bo.gjdrft.obj.find("button").prop('disabled', true); 
+            br.get({
+                path: bo.gjdrft.path + "/cetakdetil/",  
+                data: {
+                        "bsearch": bj.getDataJson(bo.gjdrft.obj.find('#bsearch')),"periode": bo.gjdrft.obj.find('#periode').val(), "kode_kantor":bo.gjdrft.obj.find('#kode_kantor').val(), "kode_kry":kode_kry  
+                    },
+                success: function(d){
+                    if(!$.isEmptyObject(d)){
+                        bo.gjdrft.obj.find("button").prop('disabled', false);
 
-                    // cetak
-                    if(jenis == "1"){
-                        bo.gjdrft.initpdf();
-                        $.merge(bo.gjdrft.pdf.content, d.content);
-                        bj.pdf_open('SLIP GAJI KARYAWAN', bo.gjdrft.pdf);               
+                        // cetak
+                        if(jenis == "1"){
+                            bo.gjdrft.initpdf();
+                            $.merge(bo.gjdrft.pdf.content, d.content);
+                            bj.pdf_open('SLIP GAJI KARYAWAN', bo.gjdrft.pdf);               
+                        }else{
+                            bj.excel_open(d.xlsx['contentXlsx'], d.xlsx['sheets'], 'SLIP GAJI KARYAWAN '+bo.gjdrft.obj.find('#periode').val()+'.xlsx') ;
+                        }
                     }else{
-                        bj.excel_open(d.xlsx['contentXlsx'], d.xlsx['sheets'], 'SLIP GAJI KARYAWAN '+bo.gjdrft.obj.find('#periode').val()+'.xlsx') ;
+                        bo.gjdrft.obj.find("button").prop('disabled', false);
+                        swal.fire("Data Tidak Ditemukan");
                     }
-                }else{
-                    bo.gjdrft.obj.find("button").prop('disabled', false);
-                    swal.fire("Data Tidak Ditemukan");
                 }
-            }
-        });
+            });
+        }else{
+            swal.fire({
+                title: 'Data tidak valid.',
+                icon: 'info'
+            }); 
+        }
     }
 
   $(function(){

@@ -140,6 +140,7 @@ class Cons extends Bismillah_Controller{
         $db = $this->db->select("kode, keterangan")
                             ->from("mst_agama")
                             ->limit(6,0)
+                            ->order_by('id DESC') 
                             ->get() ; 
         foreach($db->result_array() as $r){
             $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
@@ -160,6 +161,7 @@ class Cons extends Bismillah_Controller{
         $db = $this->db->select("kode, keterangan")
                             ->from("mst_jabatan")
                             ->limit(10,0)
+                            ->order_by('id DESC') 
                             ->get() ; 
         foreach($db->result_array() as $r){
             $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
@@ -180,6 +182,7 @@ class Cons extends Bismillah_Controller{
         $db = $this->db->select("kode, keterangan")
                             ->from("mst_pendidikan")
                             ->limit(10,0)
+                            ->order_by('id DESC') 
                             ->get() ; 
         foreach($db->result_array() as $r){
             $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
@@ -211,6 +214,7 @@ class Cons extends Bismillah_Controller{
         $db = $this->db->select("kode, keterangan")
                             ->from("mst_abs_golongan")
                             ->limit(10,0)
+                            ->order_by('id DESC') 
                             ->get() ; 
         foreach($db->result_array() as $r){
             $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
@@ -231,6 +235,7 @@ class Cons extends Bismillah_Controller{
         $db = $this->db->select("kode, keterangan") 
                             ->from("gj_golongan")
                             ->limit(10,0)
+                            ->order_by('id DESC') 
                             ->get() ; 
         foreach($db->result_array() as $r){
             $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
@@ -251,6 +256,7 @@ class Cons extends Bismillah_Controller{
         $db = $this->db->select("kode, keterangan") 
                             ->from("gj_periode")  
                             ->limit(10,0)
+                            ->order_by('kode DESC') 
                             ->get() ; 
         foreach($db->result_array() as $r){
             $d[] = array("id"=>$r['kode'],"text"=>$r['keterangan']) ; 
