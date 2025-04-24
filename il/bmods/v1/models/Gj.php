@@ -92,4 +92,4 @@ class Gj extends Bismillah_Model{
 
 }
 
-// coba cronjob jenkins poll scm 
+// coba cronjob jenkins poll scm   
