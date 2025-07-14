@@ -1,0 +1,247 @@
+<style>
+        bodys {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        textarea {
+            resize: vertical; /* Memungkinkan pengguna mengubah ukuran vertikal */
+            min-height: 80px;
+            max-height: 200px;
+        }
+        .radio-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .ai-response {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9f5fd;
+            border: 1px solid #cce7ff;
+            border-radius: 8px;
+            text-align: center;
+            color: #333;
+            min-height: 50px; /* Agar ada ruang untuk respons */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-style: italic;
+        }
+    </style>
+
+<div class="container">
+        <form id="aiForm">
+            <div class="form-group">
+                <label for="user_query">Apa yang ingin Anda tanyakan atau diskusikan?</label>
+                <textarea id="user_query" name="user_query" placeholder="Contoh: Tolong buatkan ide makan malam sehat untuk 2 orang..." rows="4"></textarea>
+            </div>
+
+
+            <button name="btnkirim">Kirim ke AI</button>
+        </form>
+
+        <div class="ai-response" id="aiResponseArea">
+            Respons dari AI akan muncul di sini...
+        </div>
+    </div>
+
+
+<script>
+
+
+  // --- Bagian JavaScript (Simulasi Interaksi AI) ---
+  // Dalam aplikasi nyata, bagian ini akan mengirim data ke server
+  // dan menunggu respons dari model AI.
+
+  document.getElementById('aiForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Mencegah form reload halaman
+
+    const userQuery = document.getElementById('user_query').value;
+    const responseArea = document.getElementById('aiResponseArea');
+
+    responseArea.textContent = 'AI sedang berpikir... Mohon tunggu.';
+    responseArea.style.backgroundColor = '#fffacd'; // Warna kuning muda
+
+    // Simulasi respons dari AI setelah beberapa detik
+    setTimeout(() => {
+        let aiResponseText = '';
+
+
+        if (responseFormat === 'simple' && aiResponseText.length > 100) {
+              aiResponseText = aiResponseText.substring(0, 100) + "... (Respons disingkat)";
+        } else if (responseFormat === 'bullet' && !aiResponseText.includes('\n')) {
+            aiResponseText = aiResponseText.replace(/\. /g, '.\n- '); // Contoh sederhana mengubah ke poin
+            aiResponseText = "- " + aiResponseText;
+        }
+
+        responseArea.textContent = aiResponseText;
+        responseArea.style.backgroundColor = '#e9f5fd'; // Kembali ke warna awal
+    }, 2000); // Simulasi penundaan 2 detik
+  });
+
+  bo.aidas.initComp = function(){
+      // select2 ke v1/cons
+      this.obj.find('.scons').s2({
+          url: "v1/Cons"
+      });
+
+      // select2 ke dirinya sendiri
+      this.obj.find('.sme').s2({
+          url: bo.aidas.url
+      });
+
+      // select2 biasa dari option
+      this.obj.find('.s2').select();
+
+      // field format tanggal
+      this.obj.find('.tgl, .date').datepicker({
+          format: "dd-mm-yyyy"
+      });
+      this.obj.find('.tgl').datepicker('update', app.app.tgl.now);
+
+      // field hanya input numeric
+      this.obj.find('.num').autoNumeric('init', {mDec:'0', vMax:'9999999999'});
+
+      this.gr1_destroy();
+      this.gr1_loadd(); 
+      this.gr1_load();
+      bo.aidas.initData() ;
+
+  }
+
+  bo.aidas.initCb = function(){
+      this.obj.find('#skd_cabang').on('select2:selecting', function(e){
+          setTimeout(function(){
+              bo.aidas.gr1_reloadd();
+          }, 5);
+      });
+
+      this.obj.find('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e){
+          switch(e.target.hash){
+              case '#tab-1': 
+                  bo.aidas.init();
+                  bo.aidas.gr1_reload();
+              break;
+          }
+      }); 
+  }
+
+  bo.aidas.initFunc = function(){
+        this.obj.find(' #tgl_awal, #tgl_akhir').on('change',function(){
+          bo.aidas.gr1_reloadd() ;  
+    });
+
+      this.obj.find('#bform').submit(function(){
+          swal.fire({
+              title: 'Apakah data sudah benar?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya',
+              cancelButtonText: 'Tidak'
+          }).then((result)=>{
+              if (result.isConfirmed) {
+                  br.post({
+                      path : bo.aidas.url + "/" + bo.aidas.kode ,
+                      data : $.extend(true, bj.getDataJson(this), {'gr1': w2ui[bo.aidas.id + '_gr1'].records}),
+                      success: function(d){
+                          bo.aidas.init();
+                          bo.aidas.obj.find('.nav-tabs a[href="#tab-1"]').tab('show'); 
+
+                          swal.fire({
+                              title: 'Data berhasil disimpan.',
+                              icon: 'success'
+                          }); 
+                      }
+                  });
+              }
+          });
+          event.preventDefault(); 
+      }) ;
+  }
+
+  bo.aidas.initData = function(){ 
+    br.get({
+        path : bo.aidas.url + '/initdata',
+        success: function(d){
+          $.each(d, function(i, v) {
+            people.push(v);
+          }); 
+
+          w2ui[bo.aidas.id + '_gr1'].getColumn('abs_status').editable.items = people;
+        }  
+    }) ;   
+    
+  }
+
+  $(function(){ 
+      bo.aidas.initComp() ;
+      bo.aidas.initCb() ;
+      bo.aidas.initFunc() ;
+      bo.aidas.init();
+  }) ;
+</script>

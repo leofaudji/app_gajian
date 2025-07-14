@@ -205,7 +205,7 @@ app.interval    = function(){
     app.param.mnotif++;
     app.param.mrefresh++;
     app.param.idle++;
-    console.log("CV. Mitra Digital Teknologi | CV Ilmion Creative بسم الله الرحمن الرحيم " + app.param.idle); 
+    console.log("CV Ilmion Creative بسم الله الرحمن الرحيم " + app.param.idle); 
     if(app.param.idle >= 50){
         // 1. Logout if not any work in 10 minutes
         app.logout() ;
